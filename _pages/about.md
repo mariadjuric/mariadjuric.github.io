@@ -28,7 +28,7 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-I am a PhD student at [UCL, MSSL](https://www.ucl.ac.uk/mathematical-physical-sciences/mssl), supervised by Dr. Ralph Schönrich, dissecting the dynamics of vertical structure of the Milky Way Galaxy. 
+I am a PhD student at UCL, MSSL, supervised by Dr. Ralph Schönrich, dissecting the dynamics of vertical structure of the Milky Way Galaxy. 
 
 **Research**
 
