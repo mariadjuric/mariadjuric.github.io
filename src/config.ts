@@ -8,10 +8,9 @@ export const siteConfig = {
   heroSubtitle:
     "Physics PhD at UCL working at the intersection of deep learning, dynamical systems, stochastic modelling, and scientific computing.",
   location: "London, UK / EU",
-  phone: "+44 7488 591700",
   social: {
     email: "maria.djuric99@gmail.com",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/maria-djuric/",
     github: "https://github.com/mariadjuric",
   },
   profileImage: "/profile.png",
