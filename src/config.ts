@@ -8,7 +8,6 @@ export const siteConfig = {
   heroSubtitle:
     "Physics PhD at UCL working at the intersection of deep learning, dynamical systems, stochastic modelling, and scientific computing.",
   location: "London, UK / EU",
-  phone: "+44 7488 591700",
   social: {
     email: "maria.djuric99@gmail.com",
     linkedin: "#",
@@ -165,7 +164,6 @@ export const siteConfig = {
       description:
         "A more accessible overview of equilibrium distribution functions, diffusion methods, and why they matter in Milky Way modelling.",
     }
-  ],
-  footerNote:
-    "Built as a clean portfolio base with room to expand — publications, talks, writing, and project detail pages can all be added next.",
+  ]
+    
 };
