@@ -81,6 +81,31 @@ npm install
 npm run dev
 ```
 
+## Refreshing the FMAP embed and figures
+
+If the FMAP repo has newer results, you can sync the portfolio snapshot with one command:
+
+```bash
+./scripts/update-fmap.sh
+```
+
+By default the script pulls from:
+
+```text
+/Users/mariadjuric/FindMyArxivPaper
+```
+
+It copies:
+- the latest embedded atlas HTML/data snapshot into `public/fmap/`
+- the main FMAP result figures into `public/images/blog/`
+- then rebuilds the Astro site
+
+If the FMAP repo lives somewhere else, override the source path temporarily:
+
+```bash
+FMAP_DIR=/path/to/FindMyArxivPaper ./scripts/update-fmap.sh
+```
+
 Local dev server:
 
 ```bash
