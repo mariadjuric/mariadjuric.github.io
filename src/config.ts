@@ -55,11 +55,11 @@ export const siteConfig = {
         "An paper-finder that fetches astro-ph papers from arXiv, embeds title+abstract text, trains a category classifier, evaluates retrieval, and generates an interactive UMAP-based HTML map for browsing scientific papers as a dense local atlas.",
       links: [
         {
-          label: "Project write-up",
+          label: "Blog",
           url: "/blog/fmap-paper-atlas"
         },
         {
-          label: "Interactive atlas",
+          label: "Interactive map",
           url: "/fmap/index.html"
         },
         {
