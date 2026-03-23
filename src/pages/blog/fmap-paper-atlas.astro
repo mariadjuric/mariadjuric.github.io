@@ -17,8 +17,8 @@ const pageDescription =
     <title>{pageTitle} | {siteConfig.name}</title>
   </head>
   <body class="bg-white text-gray-900">
-    <main class="px-8 py-12 sm:px-12 md:px-20 md:py-16">
-      <article class="mx-auto max-w-5xl">
+    <main class="px-6 py-12 sm:px-10 md:px-14 md:py-16 lg:px-16 xl:px-20">
+      <article class="mx-auto max-w-7xl">
         <a href="/#blog" class="text-sm font-medium text-gray-500 hover:text-gray-900">← Back to portfolio</a>
 
         <header class="mt-6 border-b border-gray-200 pb-10">
@@ -57,11 +57,11 @@ const pageDescription =
             The atlas below is the main output of the project. Each point is a paper, coloured by astro-ph category. The positions are not hand-made:
             they come from embedding each paper using <code>title + abstract</code>, then projecting those vectors into 2D with UMAP so that local neighborhoods stay visually meaningful.
           </p>
-          <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 shadow-sm">
+          <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 shadow-sm -mx-2 sm:-mx-4 lg:-mx-6 xl:-mx-8">
             <iframe
               src="/fmap/index.html"
               title="FMAP interactive atlas"
-              class="h-[780px] w-full bg-black"
+              class="h-[860px] w-full bg-black lg:h-[960px]"
               loading="lazy"
             ></iframe>
           </div>
