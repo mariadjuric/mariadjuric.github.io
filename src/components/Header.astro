@@ -17,10 +17,10 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
       <ul class="flex items-center gap-6 text-sm font-medium text-gray-700">
         <li><a href="#about" class="transition-colors hover:text-black">About</a></li>
         {hasProjects && <li><a href="#projects" class="transition-colors hover:text-black">Projects</a></li>}
+        {hasBlog && <li><a href="#blog" class="transition-colors hover:text-black">Blog</a></li>}
         {hasAwards && <li><a href="#awards" class="transition-colors hover:text-black">Awards</a></li>}
         {hasExperience && <li><a href="#experience" class="transition-colors hover:text-black">Experience</a></li>}
         {hasEducation && <li><a href="#education" class="transition-colors hover:text-black">Education</a></li>}
-        {hasBlog && <li><a href="#blog" class="transition-colors hover:text-black">Blog</a></li>}
       </ul>
     </div>
   </nav>
