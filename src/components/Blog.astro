@@ -22,6 +22,19 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
                 </span>
               </div>
               <p class="mt-4 leading-7 text-gray-700">{post.description}</p>
+              {post.url && (
+                <div class="mt-5">
+                  <a
+                    href={post.url}
+                    class="inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium transition-colors hover:text-white"
+                    style={`border-color: ${siteConfig.accentColor}; color: ${siteConfig.accentColor};`}
+                    onMouseOver={`this.style.backgroundColor='${siteConfig.accentColor}'; this.style.color='white';`}
+                    onMouseOut={`this.style.backgroundColor='transparent'; this.style.color='${siteConfig.accentColor}';`}
+                  >
+                    Read post
+                  </a>
+                </div>
+              )}
             </article>
           ))}
         </div>

@@ -1,0 +1,193 @@
+---
+import "../../styles/global.css";
+import { siteConfig } from "../../config";
+
+const pageTitle = "Building FMAP: an interactive astro-ph paper atlas with embeddings, UMAP, and arXiv metadata";
+const pageDescription =
+  "A technical write-up of FMAP: astro-ph ingestion from arXiv, TF-IDF + LinearSVC classification, sentence embeddings, UMAP projection, evaluation plots, and an embedded interactive atlas.";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={pageDescription} />
+    <title>{pageTitle} | {siteConfig.name}</title>
+  </head>
+  <body class="bg-white text-gray-900">
+    <main class="px-8 py-12 sm:px-12 md:px-20 md:py-16">
+      <article class="mx-auto max-w-5xl">
+        <a href="/#blog" class="text-sm font-medium text-gray-500 hover:text-gray-900">← Back to portfolio</a>
+
+        <header class="mt-6 border-b border-gray-200 pb-10">
+          <p class="text-sm font-semibold uppercase tracking-[0.18em]" style={`color: ${siteConfig.accentColor}`}>
+            Project write-up
+          </p>
+          <h1 class="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
+            Building FMAP: an interactive astro-ph paper atlas with embeddings, UMAP, and arXiv metadata
+          </h1>
+          <p class="mt-6 max-w-4xl text-lg leading-8 text-gray-700">
+            FMAP started as a lightweight scientific-paper exploration pipeline and grew into a more coherent astrophysics atlas:
+            a project that fetches astro-ph metadata from arXiv, learns useful text representations from titles and abstracts,
+            evaluates both classification and retrieval, and renders the resulting paper landscape as an interactive browser-based map.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3 text-sm text-gray-600">
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Python</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Sentence Transformers</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">UMAP</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">LinearSVC</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Astrophysics</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Interactive Visualization</span>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="/fmap/index.html" class="inline-flex items-center rounded-full bg-gray-900 px-5 py-3 text-sm font-medium text-white hover:bg-black">
+              Open interactive atlas
+            </a>
+            <a href="https://github.com/mariadjuric/FindMyArxivPaper" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-full border border-gray-300 px-5 py-3 text-sm font-medium text-gray-800 hover:border-gray-900 hover:text-black">
+              View GitHub repo
+            </a>
+          </div>
+        </header>
+
+        <section class="mt-12">
+          <h2 class="text-3xl font-bold text-gray-900">Interactive atlas</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            The atlas below is the main output of the project. Each point is a paper, coloured by astro-ph category. The positions are not hand-made:
+            they come from embedding each paper using <code>title + abstract</code>, then projecting those vectors into 2D with UMAP so that local neighborhoods stay visually meaningful.
+          </p>
+          <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 shadow-sm">
+            <iframe
+              src="/fmap/index.html"
+              title="FMAP interactive atlas"
+              class="h-[780px] w-full bg-black"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <p class="mt-4 text-sm leading-7 text-gray-500">
+            If the embed is too small on your screen, open the full atlas directly: <a href="/fmap/index.html" class="underline">/fmap/index.html</a>.
+          </p>
+        </section>
+
+        <section class="mt-16 grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900">What the model is doing</h2>
+            <p class="mt-4 text-lg leading-8 text-gray-700">
+              FMAP deliberately uses <strong>two representations</strong> of the same paper corpus, because the project needs two kinds of behavior.
+            </p>
+            <div class="mt-6 space-y-6">
+              <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+                <h3 class="text-xl font-semibold text-gray-900">1. Category classification</h3>
+                <p class="mt-3 leading-7 text-gray-700">
+                  For supervised category prediction, FMAP uses <strong>TF-IDF with unigram and bigram features</strong> over the concatenated title and abstract,
+                  followed by a <strong>LinearSVC</strong>. This is fast, interpretable, and surprisingly strong for scientific text, where categories often carry stable terminology.
+                </p>
+              </div>
+              <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+                <h3 class="text-xl font-semibold text-gray-900">2. Retrieval and map structure</h3>
+                <p class="mt-3 leading-7 text-gray-700">
+                  Separately, FMAP embeds every paper using <strong>sentence-transformers/all-MiniLM-L6-v2</strong>. Those dense vectors are used for semantic search,
+                  nearest-neighbor recommendations, retrieval metrics, and the atlas geometry itself.
+                </p>
+              </div>
+            </div>
+          </div>
+          <aside class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h3 class="text-xl font-semibold text-gray-900">Training setup</h3>
+            <ul class="mt-4 space-y-3 text-gray-700">
+              <li><strong>Input text:</strong> title + abstract</li>
+              <li><strong>Classifier:</strong> TF-IDF + LinearSVC</li>
+              <li><strong>Embeddings:</strong> all-MiniLM-L6-v2</li>
+              <li><strong>Split:</strong> 75% train / 25% test</li>
+              <li><strong>Map projection:</strong> UMAP (cosine metric)</li>
+              <li><strong>Retrieval metric:</strong> Precision@5</li>
+            </ul>
+            <p class="mt-6 text-sm leading-7 text-gray-500">
+              The map uses <em>all loaded papers</em>, not just the test split. So increasing the corpus size directly makes the atlas denser.
+            </p>
+          </aside>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Why UMAP instead of PCA?</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            Earlier versions used PCA for the 2D map. PCA is easy and quick, but it often spreads semantic clusters too evenly and flattens the interesting local geometry.
+            For a paper atlas, that matters: if nearby points do not feel meaningfully related, the map becomes decorative rather than useful.
+          </p>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            UMAP gives a much better compromise for this kind of visualization. It preserves local neighborhood structure more faithfully, makes clusters feel more natural,
+            and gives the atlas a denser, more legible shape. In FMAP, the current map uses a moderate neighborhood size with a low minimum distance to keep the local structure compact without turning it into noise.
+          </p>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Main results and figures</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            FMAP writes out a small set of useful diagnostics after each run: category balance, year distribution, a 2D embedding view, and a confusion matrix for the supervised classifier.
+            Together they tell you not just whether the model performs reasonably, but also what kind of corpus the atlas actually represents.
+          </p>
+
+          <div class="mt-10 grid gap-10">
+            <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+              <img src="/images/blog/fmap-embedding-projection.png" alt="UMAP projection of FMAP paper embeddings" class="w-full" />
+              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+                <strong>Embedding projection.</strong> This plot shows the 2D UMAP layout that underlies the atlas. The goal is not a perfectly separated classifier picture,
+                but a readable semantic landscape where neighboring papers often feel topically close.
+              </figcaption>
+            </figure>
+
+            <div class="grid gap-10 lg:grid-cols-2">
+              <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+                <img src="/images/blog/fmap-confusion-matrix.png" alt="FMAP classifier confusion matrix" class="w-full" />
+                <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+                  <strong>Confusion matrix.</strong> The classifier is not perfect, but the strong diagonal shows that category-specific language is learnable.
+                  The remaining confusions are mostly between nearby astrophysical subfields rather than random failure.
+                </figcaption>
+              </figure>
+
+              <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+                <img src="/images/blog/fmap-label-distribution.png" alt="FMAP category distribution" class="w-full" />
+                <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+                  <strong>Category distribution.</strong> This figure makes it obvious whether the atlas is balanced or dominated by a few astro-ph labels.
+                </figcaption>
+              </figure>
+            </div>
+
+            <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+              <img src="/images/blog/fmap-year-distribution.png" alt="FMAP published year distribution" class="w-full" />
+              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+                <strong>Published year distribution.</strong> This was especially useful while debugging arXiv ingestion. It revealed when a nominally large query was still only pulling a recent slice instead of a true historical range.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">How the pipeline works end-to-end</h2>
+          <ol class="mt-6 list-decimal space-y-4 pl-6 text-lg leading-8 text-gray-700">
+            <li>Query arXiv for astro-ph categories, optionally year-by-year over a historical range.</li>
+            <li>Parse metadata and deduplicate records by arXiv URL.</li>
+            <li>Build <code>combined_text = title + abstract</code>.</li>
+            <li>Split the dataset into training and test partitions.</li>
+            <li>Train a TF-IDF + LinearSVC classifier for category prediction.</li>
+            <li>Embed every paper using a sentence-transformer.</li>
+            <li>Evaluate retrieval using nearest neighbors in embedding space.</li>
+            <li>Project embeddings to 2D with UMAP and generate the interactive HTML atlas.</li>
+          </ol>
+        </section>
+
+        <section class="mt-16 rounded-3xl border border-gray-200 bg-gray-50 p-8">
+          <h2 class="text-3xl font-bold text-gray-900">Why I think this project is interesting</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            FMAP is a good example of the kind of technical work I enjoy: not just training a model in isolation, but building a full loop from data acquisition to representation learning to evaluation to a public-facing interface.
+            The interesting part is the combination: machine learning, scientific text, visualization, and enough systems glue to make the output actually usable.
+          </p>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            It is also a nice reminder that project quality is often about structure rather than only model novelty. A simple classifier can be perfectly sensible if the embeddings, atlas, diagnostics, and interaction design make the overall system coherent.
+          </p>
+        </section>
+      </article>
+    </main>
+  </body>
+</html>

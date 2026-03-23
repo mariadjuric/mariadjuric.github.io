@@ -48,6 +48,26 @@ export const siteConfig = {
       skills: ["PyTorch", "Deep Learning", "Hamiltonian Dynamics", "Research Code"]
     },
     {
+      name: "FMAP: FindMyArxivPaper",
+      description:
+        "An astrophysics paper-atlas project that fetches astro-ph papers from arXiv, embeds title+abstract text, trains a category classifier, evaluates retrieval, and generates an interactive UMAP-based HTML map for browsing scientific papers as a dense local atlas.",
+      links: [
+        {
+          label: "Project write-up",
+          url: "/blog/fmap-paper-atlas"
+        },
+        {
+          label: "Interactive atlas",
+          url: "/fmap/index.html"
+        },
+        {
+          label: "GitHub",
+          url: "https://github.com/mariadjuric/FindMyArxivPaper"
+        }
+      ],
+      skills: ["Python", "NLP Embeddings", "UMAP", "Astrophysics", "Interactive Visualization"]
+    },
+    {
       name: "Deep Learning for Hamiltonian Dynamics",
       description:
         "Research project at UCL developing Koopman autoencoder and symplectic learning models to recover action-angle coordinates from Hamiltonian trajectories, with benchmarking against analytical and numerical methods down to very small errors.",
@@ -146,6 +166,13 @@ export const siteConfig = {
     }
   ],
   blog: [
+    {
+      title: "Building FMAP: an interactive astro-ph paper atlas with embeddings, UMAP, and arXiv metadata",
+      status: "New",
+      description:
+        "A full write-up of the FMAP project: arXiv ingestion, TF-IDF + LinearSVC classification, sentence-transformer embeddings, UMAP map construction, evaluation plots, and an embedded interactive atlas.",
+      url: "/blog/fmap-paper-atlas"
+    },
     {
       title: "Notes on Learning Action-Angle Coordinates",
       status: "Planned",
