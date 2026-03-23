@@ -96,14 +96,21 @@ By default the script pulls from:
 ```
 
 It copies:
-- the latest embedded atlas HTML/data snapshot into `public/fmap/`
-- the main FMAP result figures into `public/images/blog/`
+- the latest embedded atlas HTML from `outputs/site/` into `public/fmap/`
+- a reduced **public snapshot** of the latest atlas data into `public/fmap/data.js` (default: 10k points)
+- the main FMAP result figures from `outputs/figures/` into `public/images/blog/`
 - then rebuilds the Astro site
 
 If the FMAP repo lives somewhere else, override the source path temporarily:
 
 ```bash
 FMAP_DIR=/path/to/FindMyArxivPaper ./scripts/update-fmap.sh
+```
+
+You can also change the public atlas size cap if needed:
+
+```bash
+PUBLIC_ATLAS_MAX_POINTS=12000 ./scripts/update-fmap.sh
 ```
 
 Local dev server:

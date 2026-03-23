@@ -43,10 +43,10 @@ const pageDescription =
           </div>
           <div class="mt-8 flex flex-wrap gap-3">
             <a href="/fmap/index.html" class="inline-flex items-center rounded-full bg-gray-900 px-5 py-3 text-sm font-medium text-white hover:bg-black">
-              Open interactive atlas
+              Open 10k interactive atlas
             </a>
             <a href="https://github.com/mariadjuric/FindMyArxivPaper" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-full border border-gray-300 px-5 py-3 text-sm font-medium text-gray-800 hover:border-gray-900 hover:text-black">
-              View GitHub repo
+              View GitHub repo / full project
             </a>
           </div>
         </header>
@@ -57,6 +57,9 @@ const pageDescription =
             The atlas below is the main output of the project. Each point is a paper, coloured by astro-ph category. The positions are not hand-made:
             they come from embedding each paper using <code>title + abstract</code>, then projecting those vectors into 2D with UMAP so that local neighborhoods stay visually meaningful.
           </p>
+          <p class="mt-4 text-base leading-7 text-gray-500">
+            The embedded website version is intentionally capped to a lighter public snapshot (10k points) so it stays fast and small enough for GitHub Pages. The full project and larger local atlas runs live in the FMAP repository.
+          </p>
           <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 shadow-sm -mx-2 sm:-mx-4 lg:-mx-6 xl:-mx-8">
             <iframe
               src="/fmap/index.html"
@@ -66,7 +69,7 @@ const pageDescription =
             ></iframe>
           </div>
           <p class="mt-4 text-sm leading-7 text-gray-500">
-            View the full map directly here: <a href="/fmap/index.html" class="underline">/fmap/index.html</a>.
+            View the public interactive snapshot here: <a href="/fmap/index.html" class="underline">/fmap/index.html</a>. For the full project and larger atlas outputs, use the external repository link above.
           </p>
         </section>
 
