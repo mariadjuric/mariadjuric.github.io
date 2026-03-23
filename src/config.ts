@@ -3,10 +3,10 @@ export const siteConfig = {
   title: "Physics PhD · Deep Learning · Quantitative Modelling",
   description:
     "Portfolio website for Maria Djuric — Physics PhD researcher working across deep learning, Hamiltonian dynamics, stochastic modelling, and scientific computing.",
-  accentColor: "#556B2F",
+  accentColor: "#627f2f",
   heroGreeting: "Hi, I'm",
   heroSubtitle:
-    "Physics PhD at UCL working at the intersection of deep learning, dynamical systems, stochastic modelling, and scientific computing.",
+    "Physics PhD at UCL specialising in deep learning, dynamical systems, stochastic modelling, and scientific computing.",
   location: "London, UK / EU",
   social: {
     email: "maria.djuric99@gmail.com",
@@ -16,9 +16,9 @@ export const siteConfig = {
   profileImage: "/profile.png",
   profileImageAlt: "Portrait of Maria Djuric",
   aboutMe: [
-    "I'm a Physics PhD researcher at University College London with a background in mathematics, physics, and scientific computing. My work sits between theory and computation: I like building models that are mathematically principled, numerically reliable, and actually useful in practice.",
-    "Recently I've been focused on deep learning for Hamiltonian dynamics and action-angle coordinates, alongside broader quantitative modelling in nonlinear diffusion, stochastic calculus, and dynamical systems. I'm especially interested in interpretable machine learning for physical systems, efficient simulation pipelines, and research tools that make complicated models easier to test and trust.",
-    "This site is a clean public-facing snapshot of my research, projects, and writing. Some sections are intentionally scaffolded so I can keep filling them in over time."
+    "I'm a Physics PhD researcher at University College London with a background in mathematics, physics, and scientific computing. My work sits between theory and computation: I like building models from abstract mathematical principles, that are numerically reliable, and actually useful in practice.",
+    "Recently I've been focusing on deep learning for Hamiltonian dynamics and action-angle coordinates, alongside broader quantitative modelling in nonlinear diffusion, stochastic calculus, and dynamical systems. I'm especially interested in interpretable machine learning for physical systems, efficient simulation pipelines, and research tools that make complicated models easier to test and trust.",
+  
   ],
   skills: [
     "Python",
@@ -28,29 +28,31 @@ export const siteConfig = {
     "C++",
     "Deep Learning",
     "Quantitative Modelling",
+    "Astrophysics",
     "Data Analysis",
     "Stochastic Calculus",
     "Nonlinear Diffusion",
     "Hamiltonian Dynamics",
-    "Scientific Computing"
+    "Scientific Computing",
+    "NLP Embeddings",
   ],
   projects: [
     {
       name: "AAKoopmanTrain",
       description:
-        "PyTorch-based research code for learning action-angle coordinates and Hamiltonian dynamics with Koopman autoencoder and symplectic deep learning approaches. Built to support reusable training, evaluation, diagnostics, and reproducible comparison against analytical and numerical baselines.",
+        "PyTorch model for learning action-angle coordinates and Hamiltonian dynamics with Koopman autoencoder and symplectic deep learning approaches. Built to support reusable training, evaluation, diagnostics, and reproducible comparison against analytical and numerical baselines.",
       links: [
         {
           label: "GitHub",
           url: "https://github.com/mariadjuric/AAKoopmanTrain"
         }
       ],
-      skills: ["PyTorch", "Deep Learning", "Hamiltonian Dynamics", "Research Code"]
+      skills: ["PyTorch", "Deep Learning", "Hamiltonian Dynamics", "PhD Research"]
     },
     {
       name: "FMAP: FindMyArxivPaper",
       description:
-        "An astrophysics paper-atlas project that fetches astro-ph papers from arXiv, embeds title+abstract text, trains a category classifier, evaluates retrieval, and generates an interactive UMAP-based HTML map for browsing scientific papers as a dense local atlas.",
+        "An paper-finder that fetches astro-ph papers from arXiv, embeds title+abstract text, trains a category classifier, evaluates retrieval, and generates an interactive UMAP-based HTML map for browsing scientific papers as a dense local atlas.",
       links: [
         {
           label: "Project write-up",
@@ -73,18 +75,6 @@ export const siteConfig = {
         "Research project at UCL developing Koopman autoencoder and symplectic learning models to recover action-angle coordinates from Hamiltonian trajectories, with benchmarking against analytical and numerical methods down to very small errors.",
       skills: ["PyTorch", "Dynamical Systems", "Action-Angle Coordinates", "Model Evaluation"]
     },
-    {
-      name: "Steady-State Equilibrium Distribution Functions for the Milky Way",
-      description:
-        "Quantitative modelling project using stochastic calculus, nonlinear diffusion, and numerical solvers for the Fokker–Planck equation to study equilibrium distributions, stability, and sensitivity to assumptions.",
-      skills: ["Python", "Fokker–Planck", "Stochastic Calculus", "Numerical Methods"]
-    },
-    {
-      name: "Vertical Phase-Space Spirals in the Milky Way",
-      description:
-        "Built C++ test-particle simulations to model Galactic vertical phase-space spirals and compared them against observational stellar data using age-consistent subgiant samples.",
-      skills: ["C++", "Simulation", "Astrophysics", "Data Analysis"]
-    }
   ],
   awards: [
     {
@@ -101,6 +91,16 @@ export const siteConfig = {
       title: "Henry Chamberlain Russell Prize in Astronomy, University of Sydney",
       dateRange: "2022",
       description: "Awarded for excellence in astronomy."
+    },
+    {
+      title: "University Medal, University of Sydney",
+      dateRange: "2021",
+      description: "Awarded for outstanding academic achievement in the Bachelor of Science (Advanced) degree."
+    },
+    {
+      title: 'Physics Foundation Scholarship No III, University of Sydney',
+      dateRange: '2021',
+      description: 'Awarded for academic excellence in physics.'
     }
   ],
   experience: [
@@ -150,7 +150,7 @@ export const siteConfig = {
       dateRange: "2022–Present",
       achievements: [
         "Physics PhD based in London.",
-        "Research spanning deep learning, Hamiltonian dynamics, stochastic modelling, and astrophysical dynamical systems.",
+        "Research in deep learning, Hamiltonian dynamics, stochastic modelling, and astrophysical dynamical systems.",
         "Supported by the UCL Graduate Research Scholarship (GRS)."
       ]
     },
@@ -173,25 +173,7 @@ export const siteConfig = {
         "A full write-up of the FMAP project: arXiv ingestion, TF-IDF + LinearSVC classification, sentence-transformer embeddings, UMAP map construction, evaluation plots, and an embedded interactive atlas.",
       url: "/blog/fmap-paper-atlas"
     },
-    {
-      title: "Notes on Learning Action-Angle Coordinates",
-      status: "Planned",
-      description:
-        "A future write-up on modelling Hamiltonian systems with Koopman autoencoders and symplectic inductive biases.",
-    },
-    {
-      title: "Research Pipeline Lessons from Scientific ML",
-      status: "Draft idea",
-      description:
-        "A practical post on experiment reproducibility, diagnostics, and benchmarking in small research codebases.",
-    },
-    {
-      title: "Stochastic Modelling for Galactic Dynamics",
-      status: "Placeholder",
-      description:
-        "A more accessible overview of equilibrium distribution functions, diffusion methods, and why they matter in Milky Way modelling.",
-    }
   ],
   footerNote:
-    "Built as a clean portfolio base with room to expand — publications, talks, writing, and project detail pages can all be added next.",
+    "Built by me and my AI agent. Source code available at [GitHub](https://github.com/mariadjuric/mariadjuric.github.io).",
 };
