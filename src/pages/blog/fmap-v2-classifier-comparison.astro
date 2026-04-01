@@ -137,6 +137,10 @@ const classDeltas = [
 
         <section class="mt-16">
           <h2 class="text-3xl font-bold text-gray-900">Headline results</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            The cleanest summary is simple: the transformer wins, but not by some silly margin. That is actually what makes the result believable.
+            The baseline was already doing real work, and v2 improves on it rather than replacing a toy.
+          </p>
           <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
@@ -166,6 +170,13 @@ const classDeltas = [
             </div>
           </div>
 
+          <figure class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <img src="/images/blog/fmap-v1-v2-headline-metrics.png" alt="FMAP v1 versus v2 headline metric comparison" class="w-full" />
+            <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+              <strong>Headline metrics.</strong> On this astro-ph evaluation setup, v2 improves both accuracy and macro F1 over the v1 TF-IDF + LinearSVC baseline.
+            </figcaption>
+          </figure>
+
           <div class="mt-8 grid gap-6 md:grid-cols-2">
             <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
               <h3 class="text-xl font-semibold text-gray-900">Overall delta</h3>
@@ -191,6 +202,14 @@ const classDeltas = [
           <p class="mt-4 text-lg leading-8 text-gray-700">
             Looking only at the headline metrics hides the more interesting story. The useful question is where the transformer helps, and where the classical baseline remains competitive.
           </p>
+
+          <figure class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <img src="/images/blog/fmap-v1-v2-per-class-f1.png" alt="FMAP per-class F1 comparison between v1 and v2" class="w-full" />
+            <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+              <strong>Per-class F1 comparison.</strong> The most meaningful improvements are in astro-ph.IM, astro-ph.CO, and astro-ph.GA, while astro-ph.HE dips slightly and astro-ph.SR is essentially flat.
+            </figcaption>
+          </figure>
+
           <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
@@ -228,6 +247,21 @@ const classDeltas = [
               The two classes that do not improve here are <strong>astro-ph.HE</strong> and <strong>astro-ph.SR</strong>, though SR is basically flat. That is a useful reminder that a bigger model does not magically dominate every label.
             </p>
           </div>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Confusion matrices, side by side</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            The most intuitive visual comparison is the confusion matrix. You can see the same test set through two different classifiers and ask whether the errors become cleaner,
+            more concentrated, and more astrophysically sensible.
+          </p>
+
+          <figure class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <img src="/images/blog/fmap-v1-v2-confusion-side-by-side.png" alt="FMAP v1 and v2 confusion matrices shown side by side" class="w-full" />
+            <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+              <strong>Side-by-side confusion matrices.</strong> The transformer improves the overall diagonal and helps on some of the harder boundaries, especially where class language overlaps.
+            </figcaption>
+          </figure>
         </section>
 
         <section class="mt-16 grid gap-8 lg:grid-cols-[1.05fr,0.95fr]">
