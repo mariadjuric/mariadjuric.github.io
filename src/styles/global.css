@@ -18,3 +18,38 @@ body {
 a {
   text-decoration: none;
 }
+
+.math-block .katex-display {
+  margin: 0;
+}
+
+.katex {
+  font-size: 1.05em;
+}
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.1rem 0;
+}
+
+
+article code {
+  font-family: "STIX Two Text", "Times New Roman", Georgia, serif;
+  font-size: 0.98em;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+article p code,
+article li code,
+article figcaption code,
+article h1 code,
+article h2 code,
+article h3 code,
+article h4 code,
+article h5 code,
+article h6 code {
+  white-space: nowrap;
+}
