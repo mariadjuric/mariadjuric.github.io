@@ -278,14 +278,14 @@ const classDeltas = [
                 In the baseline model, each paper is represented by a TF-IDF vector <code>x_d in R^V</code>, where <code>V</code> is the vocabulary size after feature selection.
                 The classifier then learns a linear score for each class:
               </p>
-              <div class="mt-4 rounded-2xl bg-gray-50 p-4 font-mono text-sm text-gray-800">
-                s_k(d) = w_k^T x_d + b_k
+              <div class="mt-4 overflow-x-auto rounded-2xl bg-gray-50 px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+                <span class="font-serif italic">s</span><sub>k</sub>(<span class="font-serif italic">d</span>) = <span class="font-serif italic">w</span><sub>k</sub><sup>T</sup><span class="font-serif italic">x</span><sub>d</sub> + <span class="font-serif italic">b</span><sub>k</sub>
               </div>
               <p class="mt-4 leading-7 text-gray-700">
                 and predicts
               </p>
-              <div class="mt-4 rounded-2xl bg-gray-50 p-4 font-mono text-sm text-gray-800">
-                y_hat(d) = argmax_k s_k(d)
+              <div class="mt-4 overflow-x-auto rounded-2xl bg-gray-50 px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+                <span class="font-serif italic">ŷ</span>(<span class="font-serif italic">d</span>) = arg max<sub>k</sub> <span class="font-serif italic">s</span><sub>k</sub>(<span class="font-serif italic">d</span>)
               </div>
               <p class="mt-4 leading-7 text-gray-700">
                 This is a good fit when categories are associated with stable terminology, characteristic phrases, and fairly separable sparse statistics.
@@ -298,14 +298,14 @@ const classDeltas = [
                 In v2, the title and abstract are tokenized and passed through SciBERT, producing a contextual representation <code>h_d</code> for the document.
                 The classification head then produces logits
               </p>
-              <div class="mt-4 rounded-2xl bg-gray-50 p-4 font-mono text-sm text-gray-800">
-                z_k(d) = W_k^T h_d + b_k
+              <div class="mt-4 overflow-x-auto rounded-2xl bg-gray-50 px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+                <span class="font-serif italic">z</span><sub>k</sub>(<span class="font-serif italic">d</span>) = <span class="font-serif italic">W</span><sub>k</sub><sup>T</sup><span class="font-serif italic">h</span><sub>d</sub> + <span class="font-serif italic">b</span><sub>k</sub>
               </div>
               <p class="mt-4 leading-7 text-gray-700">
                 and the class probabilities are given by softmax:
               </p>
-              <div class="mt-4 rounded-2xl bg-gray-50 p-4 font-mono text-sm text-gray-800">
-                p(y=k | d) = exp(z_k(d)) / sum_j exp(z_j(d))
+              <div class="mt-4 overflow-x-auto rounded-2xl bg-gray-50 px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+                <span class="font-serif italic">p</span>(<span class="font-serif italic">y</span> = <span class="font-serif italic">k</span> | <span class="font-serif italic">d</span>) = exp(<span class="font-serif italic">z</span><sub>k</sub>(<span class="font-serif italic">d</span>)) / Σ<sub>j</sub> exp(<span class="font-serif italic">z</span><sub>j</sub>(<span class="font-serif italic">d</span>))
               </div>
               <p class="mt-4 leading-7 text-gray-700">
                 Training minimizes cross-entropy over the labelled astro-ph categories. The key difference from v1 is that <code>h_d</code> depends on context, not just counts.
@@ -320,8 +320,8 @@ const classDeltas = [
                 For retrieval and mapping, FMAP uses dense sentence embeddings <code>e_d</code>. Similarity is computed with cosine similarity,
                 which reduces to a dot product when the embeddings are normalized:
               </p>
-              <div class="mt-4 rounded-2xl bg-white p-4 font-mono text-sm text-gray-800">
-                sim(d_i, d_j) = (e_i^T e_j) / (||e_i|| ||e_j||)
+              <div class="mt-4 overflow-x-auto rounded-2xl bg-white px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+                sim(<span class="font-serif italic">d</span><sub>i</sub>, <span class="font-serif italic">d</span><sub>j</sub>) = (<span class="font-serif italic">e</span><sub>i</sub><sup>T</sup><span class="font-serif italic">e</span><sub>j</sub>) / (||<span class="font-serif italic">e</span><sub>i</sub>|| ||<span class="font-serif italic">e</span><sub>j</sub>||)
               </div>
             </div>
             <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
@@ -329,14 +329,14 @@ const classDeltas = [
               <p class="mt-4 leading-7 text-gray-700">
                 Because the six classes are not perfectly balanced, macro F1 is a better summary than raw accuracy alone. For each class,
               </p>
-              <div class="mt-4 rounded-2xl bg-white p-4 font-mono text-sm text-gray-800">
-                F1_k = 2 * precision_k * recall_k / (precision_k + recall_k)
+              <div class="mt-4 overflow-x-auto rounded-2xl bg-white px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+                <span class="font-serif italic">F1</span><sub>k</sub> = 2 · <span class="font-serif italic">precision</span><sub>k</sub> · <span class="font-serif italic">recall</span><sub>k</sub> / (<span class="font-serif italic">precision</span><sub>k</sub> + <span class="font-serif italic">recall</span><sub>k</sub>)
               </div>
               <p class="mt-4 leading-7 text-gray-700">
                 and the reported macro F1 is the unweighted mean over classes:
               </p>
-              <div class="mt-4 rounded-2xl bg-white p-4 font-mono text-sm text-gray-800">
-                MacroF1 = (1 / K) * sum_k F1_k
+              <div class="mt-4 overflow-x-auto rounded-2xl bg-white px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+                <span class="font-serif italic">MacroF1</span> = (1 / <span class="font-serif italic">K</span>) · Σ<sub>k</sub> <span class="font-serif italic">F1</span><sub>k</sub>
               </div>
             </div>
           </div>
