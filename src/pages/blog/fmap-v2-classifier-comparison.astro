@@ -264,6 +264,89 @@ const classDeltas = [
           </figure>
         </section>
 
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Method, a bit more formally</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            There are really two mathematical stories in FMAP. The first is the supervised classifier, where the goal is to assign each paper to one astro-ph label.
+            The second is the embedding-and-map pipeline, where the goal is to preserve semantic neighborhoods well enough for search and visualization.
+          </p>
+
+          <div class="mt-8 grid gap-6 lg:grid-cols-2">
+            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+              <h3 class="text-2xl font-semibold text-gray-900">v1: linear classification in sparse feature space</h3>
+              <p class="mt-4 leading-7 text-gray-700">
+                In the baseline model, each paper is represented by a TF-IDF vector <code>x_d in R^V</code>, where <code>V</code> is the vocabulary size after feature selection.
+                The classifier then learns a linear score for each class:
+              </p>
+              <div class="mt-4 rounded-2xl bg-gray-50 p-4 font-mono text-sm text-gray-800">
+                s_k(d) = w_k^T x_d + b_k
+              </div>
+              <p class="mt-4 leading-7 text-gray-700">
+                and predicts
+              </p>
+              <div class="mt-4 rounded-2xl bg-gray-50 p-4 font-mono text-sm text-gray-800">
+                y_hat(d) = argmax_k s_k(d)
+              </div>
+              <p class="mt-4 leading-7 text-gray-700">
+                This is a good fit when categories are associated with stable terminology, characteristic phrases, and fairly separable sparse statistics.
+              </p>
+            </div>
+
+            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+              <h3 class="text-2xl font-semibold text-gray-900">v2: contextual representation + classification head</h3>
+              <p class="mt-4 leading-7 text-gray-700">
+                In v2, the title and abstract are tokenized and passed through SciBERT, producing a contextual representation <code>h_d</code> for the document.
+                The classification head then produces logits
+              </p>
+              <div class="mt-4 rounded-2xl bg-gray-50 p-4 font-mono text-sm text-gray-800">
+                z_k(d) = W_k^T h_d + b_k
+              </div>
+              <p class="mt-4 leading-7 text-gray-700">
+                and the class probabilities are given by softmax:
+              </p>
+              <div class="mt-4 rounded-2xl bg-gray-50 p-4 font-mono text-sm text-gray-800">
+                p(y=k | d) = exp(z_k(d)) / sum_j exp(z_j(d))
+              </div>
+              <p class="mt-4 leading-7 text-gray-700">
+                Training minimizes cross-entropy over the labelled astro-ph categories. The key difference from v1 is that <code>h_d</code> depends on context, not just counts.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-8 grid gap-6 lg:grid-cols-2">
+            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+              <h3 class="text-xl font-semibold text-gray-900">Embedding similarity</h3>
+              <p class="mt-4 leading-7 text-gray-700">
+                For retrieval and mapping, FMAP uses dense sentence embeddings <code>e_d</code>. Similarity is computed with cosine similarity,
+                which reduces to a dot product when the embeddings are normalized:
+              </p>
+              <div class="mt-4 rounded-2xl bg-white p-4 font-mono text-sm text-gray-800">
+                sim(d_i, d_j) = (e_i^T e_j) / (||e_i|| ||e_j||)
+              </div>
+            </div>
+            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+              <h3 class="text-xl font-semibold text-gray-900">Why macro F1 matters</h3>
+              <p class="mt-4 leading-7 text-gray-700">
+                Because the six classes are not perfectly balanced, macro F1 is a better summary than raw accuracy alone. For each class,
+              </p>
+              <div class="mt-4 rounded-2xl bg-white p-4 font-mono text-sm text-gray-800">
+                F1_k = 2 * precision_k * recall_k / (precision_k + recall_k)
+              </div>
+              <p class="mt-4 leading-7 text-gray-700">
+                and the reported macro F1 is the unweighted mean over classes:
+              </p>
+              <div class="mt-4 rounded-2xl bg-white p-4 font-mono text-sm text-gray-800">
+                MacroF1 = (1 / K) * sum_k F1_k
+              </div>
+            </div>
+          </div>
+
+          <p class="mt-8 text-lg leading-8 text-gray-700">
+            UMAP then takes the dense embedding geometry and produces a two-dimensional representation that tries to preserve local neighborhood structure. That is why it is useful for the atlas:
+            the objective is not just a pretty scatter plot, but a map where nearby papers tend to be semantically related.
+          </p>
+        </section>
+
         <section class="mt-16 grid gap-8 lg:grid-cols-[1.05fr,0.95fr]">
           <div>
             <h2 class="text-3xl font-bold text-gray-900">Why v2 helps</h2>
@@ -298,6 +381,41 @@ const classDeltas = [
             That is the kind of progression I like in portfolio work: start with the simple method that earns its place, then add complexity only when it buys something real.
             In this case, it does.
           </p>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">References and useful papers</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            If I were extending this project further, these are the papers I would keep closest to hand. They are the most relevant references for the transformer classifier,
+            the embedding setup, the baseline model choice, and the geometry of the atlas itself.
+          </p>
+          <div class="mt-8 space-y-5 rounded-3xl border border-gray-200 bg-white p-8 shadow-sm text-gray-700">
+            <p>
+              <strong>Vaswani et al. (2017).</strong> <em>Attention Is All You Need.</em><br />
+              <a href="https://arxiv.org/abs/1706.03762" class="underline">https://arxiv.org/abs/1706.03762</a>
+            </p>
+            <p>
+              <strong>Devlin et al. (2018).</strong> <em>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding.</em><br />
+              <a href="https://arxiv.org/abs/1810.04805" class="underline">https://arxiv.org/abs/1810.04805</a>
+            </p>
+            <p>
+              <strong>Beltagy, Lo, and Cohan (2019).</strong> <em>SciBERT: A Pretrained Language Model for Scientific Text.</em><br />
+              <a href="https://arxiv.org/abs/1903.10676" class="underline">https://arxiv.org/abs/1903.10676</a><br />
+              ACL version: <a href="https://aclanthology.org/D19-1371/" class="underline">https://aclanthology.org/D19-1371/</a>
+            </p>
+            <p>
+              <strong>Reimers and Gurevych (2019).</strong> <em>Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks.</em><br />
+              <a href="https://arxiv.org/abs/1908.10084" class="underline">https://arxiv.org/abs/1908.10084</a>
+            </p>
+            <p>
+              <strong>McInnes, Healy, and Melville (2018).</strong> <em>UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction.</em><br />
+              <a href="https://arxiv.org/abs/1802.03426" class="underline">https://arxiv.org/abs/1802.03426</a>
+            </p>
+            <p>
+              <strong>Joachims (1998).</strong> <em>Text Categorization with Support Vector Machines: Learning with Many Relevant Features.</em><br />
+              <a href="https://www.cs.cornell.edu/people/tj/publications/joachims_98a.pdf" class="underline">https://www.cs.cornell.edu/people/tj/publications/joachims_98a.pdf</a>
+            </p>
+          </div>
         </section>
       </article>
     </main>
