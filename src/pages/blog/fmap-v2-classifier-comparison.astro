@@ -1,0 +1,271 @@
+---
+import "../../styles/global.css";
+import { siteConfig } from "../../config";
+
+const pageTitle = "FMAP v2: comparing a SciBERT classifier against the v1 TF-IDF baseline on astro-ph arXiv data";
+const pageDescription =
+  "A comparison of FMAP v1 and v2 on real astro-ph arXiv ingestion data: TF-IDF + LinearSVC versus SciBERT fine-tuning, with accuracy, macro F1, per-class differences, and practical tradeoffs.";
+
+const comparisonRows = [
+  {
+    model: "v1",
+    representation: "TF-IDF (unigrams + bigrams)",
+    classifier: "LinearSVC",
+    accuracy: "0.8696",
+    macroF1: "0.8627",
+    notes: "Fast baseline, light to train, still strong"
+  },
+  {
+    model: "v2",
+    representation: "SciBERT fine-tuning",
+    classifier: "Transformer classifier",
+    accuracy: "0.8824",
+    macroF1: "0.8778",
+    notes: "Better contextual modelling on scientific text"
+  }
+];
+
+const classDeltas = [
+  { label: "astro-ph.CO", v1: "0.8864", v2: "0.9160", delta: "+0.0296" },
+  { label: "astro-ph.EP", v1: "0.9038", v2: "0.9068", delta: "+0.0030" },
+  { label: "astro-ph.GA", v1: "0.8654", v2: "0.8946", delta: "+0.0291" },
+  { label: "astro-ph.HE", v1: "0.8939", v2: "0.8818", delta: "-0.0121" },
+  { label: "astro-ph.IM", v1: "0.7595", v2: "0.8015", delta: "+0.0420" },
+  { label: "astro-ph.SR", v1: "0.8672", v2: "0.8660", delta: "-0.0012" }
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={pageDescription} />
+    <title>{pageTitle} | {siteConfig.name}</title>
+  </head>
+  <body class="bg-white text-gray-900">
+    <main class="px-6 py-12 sm:px-10 md:px-14 md:py-16 lg:px-16 xl:px-20">
+      <article class="mx-auto max-w-5xl">
+        <a href="/#blog" class="text-sm font-medium text-gray-500 hover:text-gray-900">← Back to portfolio</a>
+
+        <header class="mt-6 border-b border-gray-200 pb-10">
+          <p class="text-sm font-semibold uppercase tracking-[0.18em]" style={`color: ${siteConfig.accentColor}`}>
+            Blog
+          </p>
+          <h1 class="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
+            FMAP v2: comparing a SciBERT classifier against the v1 TF-IDF baseline on astro-ph arXiv data
+          </h1>
+          <p class="mt-6 max-w-4xl text-lg leading-8 text-gray-700">
+            FMAP started with a deliberately simple classifier: TF-IDF features over paper titles and abstracts, followed by a LinearSVC.
+            That was a sensible baseline. But once the project grew into real astro-ph ingestion, semantic retrieval, and an interactive paper atlas,
+            it made sense to test a more expressive classifier too. This post compares the original v1 baseline against the new v2 SciBERT fine-tuning path on the same astro-ph arXiv dataset.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3 text-sm text-gray-600">
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Astrophysics</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">arXiv</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">SciBERT</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">LinearSVC</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">NLP</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Model Comparison</span>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="https://github.com/mariadjuric/FindMyArxivPaper" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-full bg-gray-900 px-5 py-3 text-sm font-medium text-white hover:bg-black">
+              View FMAP repo
+            </a>
+            <a href="/blog/fmap-paper-atlas" class="inline-flex items-center rounded-full border border-gray-300 px-5 py-3 text-sm font-medium text-gray-800 hover:border-gray-900 hover:text-black">
+              Read the full FMAP project post
+            </a>
+          </div>
+        </header>
+
+        <section class="mt-14">
+          <h2 class="text-3xl font-bold text-gray-900">Dataset and setup</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            This comparison uses the retained astro-ph arXiv CSV produced by the FMAP ingestion pipeline. The current dataset contains <strong>5,000 papers</strong>
+            across six astro-ph categories, with the usual FMAP <strong>75/25 stratified train/test split</strong> and the same input text for both models:
+            <code>title + abstract</code>.
+          </p>
+          <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+              <h3 class="text-xl font-semibold text-gray-900">Class counts</h3>
+              <ul class="mt-4 space-y-2 text-gray-700">
+                <li><strong>astro-ph.GA</strong>: 1268</li>
+                <li><strong>astro-ph.HE</strong>: 1059</li>
+                <li><strong>astro-ph.SR</strong>: 809</li>
+                <li><strong>astro-ph.CO</strong>: 740</li>
+                <li><strong>astro-ph.EP</strong>: 626</li>
+                <li><strong>astro-ph.IM</strong>: 498</li>
+              </ul>
+            </div>
+            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+              <h3 class="text-xl font-semibold text-gray-900">Current corpus snapshot</h3>
+              <ul class="mt-4 space-y-2 text-gray-700">
+                <li><strong>Source</strong>: arXiv export API via FMAP ingestion</li>
+                <li><strong>Scope</strong>: astro-ph only</li>
+                <li><strong>Rows retained</strong>: 5,000</li>
+                <li><strong>Train/test split</strong>: 75% / 25%</li>
+                <li><strong>Recent-tail heavy</strong>: 2025–2026 dominated</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">What changed from v1 to v2?</h2>
+          <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+              <h3 class="text-2xl font-semibold text-gray-900">v1</h3>
+              <p class="mt-3 leading-7 text-gray-700">
+                The original classifier uses TF-IDF with unigram and bigram features, then a LinearSVC. It is fast, simple, interpretable,
+                and still a very good baseline for scientific text classification.
+              </p>
+            </div>
+            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+              <h3 class="text-2xl font-semibold text-gray-900">v2</h3>
+              <p class="mt-3 leading-7 text-gray-700">
+                The new classifier fine-tunes <strong>allenai/scibert_scivocab_uncased</strong> for six-way astro-ph classification using PyTorch and Hugging Face.
+                It is heavier and slower, but it can model context and scientific phrasing much more naturally than sparse TF-IDF features.
+              </p>
+            </div>
+          </div>
+          <p class="mt-6 text-lg leading-8 text-gray-700">
+            The important point is that FMAP now has a proper modelling ladder: a lightweight classical baseline and a more serious transformer path,
+            both sitting on top of the same real arXiv ingestion pipeline.
+          </p>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Headline results</h2>
+          <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+                <thead class="bg-gray-50 text-gray-700">
+                  <tr>
+                    <th class="px-6 py-4 font-semibold">Model</th>
+                    <th class="px-6 py-4 font-semibold">Text representation</th>
+                    <th class="px-6 py-4 font-semibold">Classifier</th>
+                    <th class="px-6 py-4 font-semibold">Accuracy</th>
+                    <th class="px-6 py-4 font-semibold">Macro F1</th>
+                    <th class="px-6 py-4 font-semibold">Notes</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                  {comparisonRows.map((row) => (
+                    <tr>
+                      <td class="px-6 py-4 font-medium text-gray-900">{row.model}</td>
+                      <td class="px-6 py-4 text-gray-700">{row.representation}</td>
+                      <td class="px-6 py-4 text-gray-700">{row.classifier}</td>
+                      <td class="px-6 py-4 text-gray-900">{row.accuracy}</td>
+                      <td class="px-6 py-4 text-gray-900">{row.macroF1}</td>
+                      <td class="px-6 py-4 text-gray-700">{row.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+              <h3 class="text-xl font-semibold text-gray-900">Overall delta</h3>
+              <ul class="mt-4 space-y-3 text-gray-700">
+                <li><strong>Accuracy:</strong> +0.0128</li>
+                <li><strong>Macro F1:</strong> +0.0151</li>
+                <li><strong>Best gain:</strong> astro-ph.IM (+0.0420 F1)</li>
+                <li><strong>Other strong gains:</strong> astro-ph.CO, astro-ph.GA</li>
+              </ul>
+            </div>
+            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+              <h3 class="text-xl font-semibold text-gray-900">Read it plainly</h3>
+              <p class="mt-4 leading-7 text-gray-700">
+                v2 is not an absurd leap over the baseline, which is actually a good sign. The v1 model was already decent. But the transformer does improve the aggregate metrics,
+                and it helps most on the more awkward or overlapping parts of the label space.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Per-class changes</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            Looking only at the headline metrics hides the more interesting story. The useful question is where the transformer helps, and where the classical baseline remains competitive.
+          </p>
+          <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+                <thead class="bg-gray-50 text-gray-700">
+                  <tr>
+                    <th class="px-6 py-4 font-semibold">Class</th>
+                    <th class="px-6 py-4 font-semibold">v1 F1</th>
+                    <th class="px-6 py-4 font-semibold">v2 F1</th>
+                    <th class="px-6 py-4 font-semibold">Delta</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                  {classDeltas.map((row) => (
+                    <tr>
+                      <td class="px-6 py-4 font-medium text-gray-900">{row.label}</td>
+                      <td class="px-6 py-4 text-gray-700">{row.v1}</td>
+                      <td class="px-6 py-4 text-gray-700">{row.v2}</td>
+                      <td class={`px-6 py-4 font-medium ${row.delta.startsWith('+') ? 'text-green-700' : 'text-gray-700'}`}>{row.delta}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="mt-8 space-y-5 text-lg leading-8 text-gray-700">
+            <p>
+              The biggest improvement is in <strong>astro-ph.IM</strong>, which is exactly the kind of class where I would hope a contextual model helps.
+              Instrumentation language often bleeds into observational and analysis-heavy work, so sparse term counting can struggle.
+            </p>
+            <p>
+              <strong>astro-ph.CO</strong> and <strong>astro-ph.GA</strong> also improve noticeably, suggesting that the transformer is picking up useful phrase-level structure rather than just keyword frequency.
+            </p>
+            <p>
+              The two classes that do not improve here are <strong>astro-ph.HE</strong> and <strong>astro-ph.SR</strong>, though SR is basically flat. That is a useful reminder that a bigger model does not magically dominate every label.
+            </p>
+          </div>
+        </section>
+
+        <section class="mt-16 grid gap-8 lg:grid-cols-[1.05fr,0.95fr]">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900">Why v2 helps</h2>
+            <p class="mt-4 text-lg leading-8 text-gray-700">
+              Scientific abstracts are not just bags of words. A lot of the distinction between neighboring astro-ph categories lives in how ideas are phrased together:
+              measurement language, observational context, inference framing, and domain-specific combinations of terms. SciBERT is a better match for that kind of text than TF-IDF.
+            </p>
+            <p class="mt-4 text-lg leading-8 text-gray-700">
+              Even when the raw metric gain is modest, v2 also matters because it opens a better research path: different backbones, class weighting,
+              better calibration, and potential links between classification and retrieval objectives later on.
+            </p>
+          </div>
+          <aside class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+            <h3 class="text-xl font-semibold text-gray-900">Tradeoffs</h3>
+            <ul class="mt-4 space-y-3 text-gray-700">
+              <li><strong>v1 wins on speed.</strong></li>
+              <li><strong>v1 wins on simplicity.</strong></li>
+              <li><strong>v2 wins on aggregate quality.</strong></li>
+              <li><strong>v2 is better aligned with scientific text.</strong></li>
+              <li><strong>v2 is the better platform for future experiments.</strong></li>
+            </ul>
+          </aside>
+        </section>
+
+        <section class="mt-16 rounded-3xl border border-gray-200 bg-gray-50 p-8">
+          <h2 class="text-3xl font-bold text-gray-900">The real takeaway</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            The best part of this comparison is not just that v2 wins. It is that FMAP now has a more honest and useful project structure.
+            There is a baseline that is cheap, explainable, and worth keeping. And there is a stronger contextual model that performs better on the same real astro-ph pipeline.
+          </p>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            That is the kind of progression I like in portfolio work: start with the simple method that earns its place, then add complexity only when it buys something real.
+            In this case, it does.
+          </p>
+        </section>
+      </article>
+    </main>
+  </body>
+</html>

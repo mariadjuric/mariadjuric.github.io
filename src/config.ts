@@ -167,6 +167,13 @@ export const siteConfig = {
   ],
   blog: [
     {
+      title: "FMAP v2: comparing a SciBERT classifier against the v1 TF-IDF baseline on astro-ph arXiv data",
+      status: "New",
+      description:
+        "A side-by-side comparison of FMAP v1 and v2 on real astro-ph arXiv ingestion data, covering accuracy, macro F1, per-class differences, and the practical tradeoffs between a fast classical baseline and transformer fine-tuning.",
+      url: "/blog/fmap-v2-classifier-comparison"
+    },
+    {
       title: "Building FMAP: an interactive astro-ph paper atlas with embeddings, UMAP, and arXiv metadata",
       status: "New",
       description:
