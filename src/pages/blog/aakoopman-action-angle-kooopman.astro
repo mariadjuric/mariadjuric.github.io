@@ -1,0 +1,210 @@
+---
+import "../../styles/global.css";
+import { siteConfig } from "../../config";
+
+const pageTitle = "Learning action-angle coordinates with a Koopman-inspired symplectic autoencoder";
+const pageDescription =
+  "A short research note on learning action-angle coordinates and orbital frequencies with a Koopman-inspired symplectic neural network, with 1D tests on the harmonic oscillator and isothermal slab.";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={pageDescription} />
+    <title>{pageTitle} | {siteConfig.name}</title>
+  </head>
+  <body class="bg-white text-gray-900">
+    <main class="px-6 py-12 sm:px-10 md:px-14 md:py-16 lg:px-16 xl:px-20">
+      <article class="mx-auto max-w-5xl">
+        <a href="/#blog" class="text-sm font-medium text-gray-500 hover:text-gray-900">← Back to portfolio</a>
+
+        <header class="mt-6 border-b border-gray-200 pb-10">
+          <p class="text-sm font-semibold uppercase tracking-[0.18em]" style={`color: ${siteConfig.accentColor}`}>
+            Blog
+          </p>
+          <h1 class="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
+            Learning action-angle coordinates with a Koopman-inspired symplectic autoencoder
+          </h1>
+          <p class="mt-6 max-w-4xl text-lg leading-8 text-gray-700">
+            I have been working on a neural-network approach to learning action-angle coordinates directly from orbital trajectories, while also recovering orbital frequencies and a Hamiltonian-like energy map. The longer-term goal is to make action-angle calculations more flexible in realistic Galactic potentials, but for now I only want to show the one-dimensional validation tests publicly.
+          </p>
+          <p class="mt-4 max-w-4xl text-lg leading-8 text-gray-700">
+            So this post is intentionally narrow: a brief bit of context, the core idea, and the 1D results in the harmonic oscillator and isothermal slab. The broader axisymmetric results are being held back for now because that work is intended for publication.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3 text-sm text-gray-600">
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">PyTorch</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Hamiltonian Dynamics</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Koopman Neural Networks</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Action-Angle Coordinates</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1.5">Galactic Dynamics</span>
+          </div>
+          <div class="mt-8 rounded-3xl border border-amber-200 bg-amber-50 px-6 py-5 text-sm leading-7 text-amber-900">
+            <strong>Note.</strong> This is a public snapshot of the project. I am only showing the one-dimensional tests here; the more extensive higher-dimensional results are deliberately omitted while the work is being prepared for publication.
+          </div>
+        </header>
+
+        <section class="mt-14">
+          <h2 class="text-3xl font-bold text-gray-900">Why action-angle coordinates matter</h2>
+          <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
+            <p>Action-angle coordinates are one of the most natural languages for regular Hamiltonian motion. In integrable systems, the actions are constants of motion, while the angles evolve linearly in time. That makes them extremely useful both for equilibrium modelling and for studying disequilibrium structure in the Milky Way.</p>
+            <p>In Galactic dynamics, these coordinates are especially valuable because distribution functions are often written in terms of the actions, and because action-angle structure can reveal moving groups, resonances, phase mixing, spiral features, and bar-driven dynamics much more cleanly than ordinary phase-space coordinates alone. The difficulty is that action-angle coordinates are only known analytically in a few ideal potentials.</p>
+            <p>This project asks whether a useful action-angle representation can be learned directly from trajectories while still respecting Hamiltonian structure.</p>
+          </div>
+        </section>
+
+        <section class="mt-16 grid gap-8 lg:grid-cols-[1.05fr,0.95fr]">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900">The idea in one paragraph</h2>
+            <p class="mt-4 text-lg leading-8 text-gray-700">
+              The model is a symplectic autoencoder. It learns an invertible map from phase-space coordinates into a latent space where each degree of freedom is represented by a two-dimensional plane. In that latent space, the dynamics are constrained to look like simple rotations, so the radius of each latent pair behaves like an action and the phase behaves like an angle.
+            </p>
+            <p class="mt-4 text-lg leading-8 text-gray-700">
+              A separate small neural network then learns the frequency map and another learns a scalar energy-like function, with the model encouraged to satisfy the Hamiltonian relation between frequency and the action-gradient of the Hamiltonian. The point is not just to reconstruct trajectories, but to make the latent variables physically interpretable.
+            </p>
+          </div>
+          <aside class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+            <h3 class="text-xl font-semibold text-gray-900">Core ingredients</h3>
+            <ul class="mt-4 space-y-3 text-gray-700">
+              <li><strong>Encoder/decoder:</strong> symplectic normalising-flow style network</li>
+              <li><strong>Latent dynamics:</strong> planar rotations</li>
+              <li><strong>Actions:</strong> latent radii</li>
+              <li><strong>Angles:</strong> latent phases</li>
+              <li><strong>Frequencies:</strong> learned frequency map</li>
+              <li><strong>Energy map:</strong> learned scalar Hamiltonian surrogate</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">A short mathematical sketch</h2>
+          <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
+            <p>The autoencoder learns an encoder and decoder so that phase-space evolution is approximately conjugate to a simpler latent evolution.</p>
+            <div class="overflow-x-auto rounded-3xl bg-gray-50 px-6 py-6 text-center text-gray-900 shadow-sm"><pre>x_(k+1) ≈ Φ(K(Ψ(x_k)))</pre></div>
+            <p>Each latent pair is interpreted as a complex coordinate whose radius encodes an action and whose phase encodes an angle.</p>
+            <div class="overflow-x-auto rounded-3xl bg-gray-50 px-6 py-6 text-center text-gray-900 shadow-sm"><pre>ψ_j = u_j + i v_j = √(2J_j) exp(iθ_j)</pre></div>
+            <p>The latent step is then just a rotation, which preserves radius exactly. That means the latent action is conserved by construction, while the frequency map is learned from data.</p>
+          </div>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Model construction</h2>
+          <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
+            <p>I am skipping most of the training details here, but the architecture matters. The encoder is built from symplectic coupling layers, so the learned map is invertible and structure-preserving by construction. The decoder is simply the inverse map. That helps separate two different questions: whether the representation itself is good, and whether the learned latent evolution is good.</p>
+            <p>In one dimension, the model is relatively small: an 8-layer symplectic encoder/decoder, plus compact MLPs for the frequency map and the Hamiltonian regressor. The two validation problems are a harmonic oscillator, where the action-angle structure is analytically known, and an isothermal slab, where the frequency varies non-trivially with action.</p>
+          </div>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">1D tests</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">
+            The first set of checks is deliberately simple. If the model cannot recover stable actions, angles, and frequencies in one dimension, there is no point pretending it will behave sensibly in more realistic Galactic potentials.
+          </p>
+          <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+              <h3 class="text-xl font-semibold text-gray-900">Harmonic oscillator</h3>
+              <p class="mt-3 leading-7 text-gray-700">Potential: Φ(z) = ω0^2 z^2 / 2 with ω0 = 0.5. Here the true frequency is constant, so this is the cleanest sanity check.</p>
+            </div>
+            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+              <h3 class="text-xl font-semibold text-gray-900">Isothermal slab</h3>
+              <p class="mt-3 leading-7 text-gray-700">Potential: Φ(z) = 2 sigma^2 log(cosh(z / 2z0)) with sigma = 1 and z0 = 1. This is more interesting because the oscillation frequency decreases with action.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Training curves</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">Both 1D experiments train cleanly. I am not showing every individual loss term here, but the main point is that the one-step, rollout, and physics-informed objectives settle to small values by the end of training in both systems.</p>
+          <div class="mt-8 grid gap-10 lg:grid-cols-2">
+            <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+              <img src="/images/blog/aakoopman/loss_curves_ho.png" alt="Training loss curves for the harmonic oscillator model" class="w-full" />
+              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600"><strong>Harmonic oscillator.</strong> Training losses decrease smoothly and remain well controlled throughout optimisation.</figcaption>
+            </figure>
+            <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+              <img src="/images/blog/aakoopman/loss_curves_iso.png" alt="Training loss curves for the isothermal slab model" class="w-full" />
+              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600"><strong>Isothermal slab.</strong> The same architecture also converges cleanly when the frequency depends on action.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Recovered actions and angles</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">The most important qualitative check is whether the learned action stays nearly constant along each orbit, while the learned angle tracks a linearly advancing variable. That is exactly what the model recovers in both 1D examples.</p>
+          <div class="mt-8 grid gap-10 lg:grid-cols-2">
+            <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+              <img src="/images/blog/aakoopman/phasespace_HO_unsup.png" alt="Harmonic oscillator phase space with learned actions and angles" class="w-full" />
+              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600"><strong>Harmonic oscillator.</strong> The learned angle closely tracks the analytic angle, and the learned action remains effectively constant along the trajectory. In this 1D test, the mean-square errors are approximately 10^-9 for the frequency and 10^-7 for the action.</figcaption>
+            </figure>
+            <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+              <img src="/images/blog/aakoopman/phasespace_iso_unsup.png" alt="Isothermal slab phase space with learned actions and angles" class="w-full" />
+              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600"><strong>Isothermal slab.</strong> The same latent construction remains useful in a system where the frequency is not constant across orbits.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Frequency-action comparison in the isothermal slab</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">For the isothermal slab, I compared the learned actions and frequencies against numerical reference values obtained from the standard orbit integrals.</p>
+          <div class="overflow-x-auto rounded-3xl bg-gray-50 px-6 py-6 text-center text-gray-900 shadow-sm mt-6"><pre>J_z = (1 / 2π) ∮ v_z dz,    Omega_z(J) = 2π ( ∮ dz / v_z )^(-1)</pre></div>
+          <p class="mt-6 text-lg leading-8 text-gray-700">The agreement is good: the absolute residuals stay within about 0.005, which is more than enough to show that the model is learning a sensible action-frequency relationship rather than just memorising trajectories.</p>
+          <figure class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <img src="/images/blog/aakoopman/omega_J_comparison_iso.png" alt="Comparison of learned and numerically integrated actions and frequencies in the isothermal slab" class="w-full" />
+            <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600"><strong>Isothermal slab validation.</strong> Learned actions and frequencies agree well with numerically integrated reference values, with absolute residuals within roughly 0.005.</figcaption>
+          </figure>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">Reconstruction and inverse mapping</h2>
+          <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
+            <p>Another useful check is to separate reconstruction quality from dynamical prediction. If a state is encoded and immediately decoded, the reconstruction is essentially exact up to numerical precision. That confirms that prediction errors are driven by the learned latent evolution and frequency map, not by a failure of invertibility in the symplectic encoder-decoder pair.</p>
+            <p>In the harmonic oscillator, the learned inverse map can also be used to generate an orbit directly from an initial action-angle point. The decoded trajectory stays close to the analytic solution, with residuals at the 10^-3 level and no obvious secular drift over multiple periods.</p>
+          </div>
+          <div class="mt-8 grid gap-10 lg:grid-cols-2">
+            <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+              <img src="/images/blog/aakoopman/reconstruction_HO_unsup.png" alt="Harmonic oscillator reconstruction from encode-decode" class="w-full" />
+              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600"><strong>Harmonic oscillator reconstruction.</strong> Encoding and decoding the same states gives reconstruction residuals close to numerical precision.</figcaption>
+            </figure>
+            <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+              <img src="/images/blog/aakoopman/reconstruction_iso.png" alt="Isothermal slab reconstruction from encode-decode" class="w-full" />
+              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600"><strong>Isothermal slab reconstruction.</strong> The invertible symplectic map remains stable away from the analytic toy case.</figcaption>
+            </figure>
+          </div>
+          <figure class="mt-10 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <img src="/images/blog/aakoopman/inverse_rollout_HO_unsup.png" alt="Harmonic oscillator rollout generated from learned inverse map" class="w-full" />
+            <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600"><strong>Inverse rollout in the harmonic oscillator.</strong> Starting from an initial action-angle point, the model generates a stable decoded orbit that remains close to the analytic trajectory, with residuals typically around 10^-3.</figcaption>
+          </figure>
+        </section>
+
+        <section class="mt-16 rounded-3xl border border-gray-200 bg-gray-50 p-8">
+          <h2 class="text-3xl font-bold text-gray-900">What I think is actually interesting here</h2>
+          <p class="mt-4 text-lg leading-8 text-gray-700">There is no shortage of machine-learning models that can fit trajectories. The more interesting question is whether a model can discover coordinates that behave like the right physical variables. These 1D tests suggest that a symplectic autoencoder plus constrained latent rotations is a plausible route to doing exactly that.</p>
+          <p class="mt-4 text-lg leading-8 text-gray-700">The real challenge is of course the higher-dimensional Galactic case, where actions and frequencies are more subtle and the benchmark is much harsher. I am deliberately not showing those results yet, but the 1D experiments are the reason I think the larger programme is worth pursuing.</p>
+        </section>
+
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-gray-900">References</h2>
+          <div class="mt-8 space-y-5 rounded-3xl border border-gray-200 bg-white p-8 shadow-sm text-gray-700">
+            <p><strong>Antoja et al. (2023).</strong> <em>Vertical waves, ridges and phase-space spirals in the Milky Way.</em> <a href="https://ui.adsabs.harvard.edu/abs/2023A%26ARv..31...10A/abstract" class="underline">ADS</a></p>
+            <p><strong>Binney (2010).</strong> <em>Distribution functions for the Milky Way.</em> <a href="https://ui.adsabs.harvard.edu/abs/2010MNRAS.401.2318B/abstract" class="underline">ADS</a></p>
+            <p><strong>Bramburger (2024).</strong> <em>Introduction to Koopman Operator Theory and Its Applications.</em></p>
+            <p><strong>Brunton, Budišić, Kaiser, and Kutz (2022).</strong> <em>Modern Koopman Theory for Dynamical Systems.</em> <a href="https://arxiv.org/abs/2102.12086" class="underline">arXiv</a></p>
+            <p><strong>Greydanus, Dzamba, and Yosinski (2019).</strong> <em>Hamiltonian Neural Networks.</em> <a href="https://arxiv.org/abs/1906.01563" class="underline">arXiv</a></p>
+            <p><strong>Gaia Collaboration (2023).</strong> <em>Gaia Data Release 3.</em> <a href="https://ui.adsabs.harvard.edu/abs/2023A%26A...674A...1G/abstract" class="underline">ADS</a></p>
+            <p><strong>Hunt et al. (2019).</strong> <em>Kinematic substructure in action space with Gaia.</em> <a href="https://ui.adsabs.harvard.edu/abs/2019MNRAS.490.1026H/abstract" class="underline">ADS</a></p>
+            <p><strong>Ibata et al. (2021).</strong> <em>ACTIONFINDER: deep learning of canonical transformations.</em> <a href="https://ui.adsabs.harvard.edu/abs/2021ApJ...914..123I/abstract" class="underline">ADS</a></p>
+            <p><strong>Jin et al. (2020).</strong> <em>SympNets: intrinsic structure-preserving neural networks for Hamiltonian systems.</em> <a href="https://arxiv.org/abs/2001.03750" class="underline">arXiv</a></p>
+            <p><strong>Koopman (1931).</strong> <em>Hamiltonian systems and transformation in Hilbert space.</em></p>
+            <p><strong>Lusch, Kutz, and Brunton (2018).</strong> <em>Deep learning for universal linear embeddings of nonlinear dynamics.</em> <a href="https://www.nature.com/articles/s41467-018-07210-0" class="underline">Nature Communications</a></p>
+            <p><strong>Palicio et al. (2023).</strong> <em>Tracing spiral arms in action space.</em></p>
+            <p><strong>Paszke et al. (2019).</strong> <em>PyTorch: An Imperative Style, High-Performance Deep Learning Library.</em> <a href="https://arxiv.org/abs/1912.01703" class="underline">arXiv</a></p>
+            <p><strong>Piffl et al. (2014).</strong> <em>Constraining the Galaxy's mass distribution with realistic action calculations.</em> <a href="https://ui.adsabs.harvard.edu/abs/2014MNRAS.445.3133P/abstract" class="underline">ADS</a></p>
+            <p><strong>Sanders and Binney (2016).</strong> <em>Methods for computing actions, angles and frequencies in Galactic potentials.</em> <a href="https://ui.adsabs.harvard.edu/abs/2016MNRAS.457.2107S/abstract" class="underline">ADS</a></p>
+            <p><strong>Williams, Kevrekidis, and Rowley (2015).</strong> <em>A data-driven approximation of the Koopman operator: extending dynamic mode decomposition.</em> <a href="https://link.springer.com/article/10.1007/s00332-015-9258-5" class="underline">Journal of Nonlinear Science</a></p>
+          </div>
+        </section>
+      </article></article>
+    </main>
+  </body>
+</html>

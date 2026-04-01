@@ -167,6 +167,13 @@ export const siteConfig = {
   ],
   blog: [
     {
+      title: "Learning action-angle coordinates with a Koopman-inspired symplectic autoencoder",
+      status: "New",
+      description:
+        "A short research note on learning action-angle coordinates and orbital frequencies from trajectories with a symplectic Koopman-style autoencoder, showing only the 1D harmonic-oscillator and isothermal-slab tests for now.",
+      url: "/blog/aakoopman-action-angle-kooopman"
+    },
+    {
       title: "FMAP v2: comparing a SciBERT classifier against the v1 TF-IDF baseline on astro-ph arXiv data",
       status: "New",
       description:
