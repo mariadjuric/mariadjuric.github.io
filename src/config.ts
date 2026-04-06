@@ -25,6 +25,7 @@ export const siteConfig = {
     "NumPy",
     "SciPy",
     "PyTorch",
+    "scikit-learn",
     "C++",
     "Deep Learning",
     "Quantitative Modelling",
@@ -43,19 +44,27 @@ export const siteConfig = {
         "PyTorch model for learning action-angle coordinates and Hamiltonian dynamics with Koopman autoencoder and symplectic deep learning approaches. Built to support reusable training, evaluation, diagnostics, and reproducible comparison against analytical and numerical baselines.",
       links: [
         {
-          label: "GitHub",
-          url: "https://github.com/mariadjuric/AAKoopmanTrain"
-        }
+          label: "Blog",
+          url: "/blog/aakoopman-action-angle-kooopman"
+        },
+        // {
+        //   label: "GitHub",
+        //   url: "https://github.com/mariadjuric/AAKoopmanTrain"
+        // }
       ],
       skills: ["PyTorch", "Deep Learning", "Hamiltonian Dynamics", "PhD Research"]
     },
     {
       name: "FMAP: FindMyArxivPaper",
       description:
-        "An paper-finder that fetches astro-ph papers from arXiv, embeds title+abstract text, trains a category classifier, evaluates retrieval, and generates an interactive UMAP-based HTML map for browsing scientific papers as a dense local atlas.",
+        "An paper-finder that fetches astro-ph papers from arXiv, embeds title+abstract text, trains a category classifier, evaluates retrieval, and generates an interactive UMAP-based HTML map for browsing scientific papers as a dense local map.",
       links: [
         {
-          label: "Blog",
+          label: "Blog v2",
+          url: "/blog/fmap-v2-classifier-comparison"
+        },
+        {
+          label: "Blog v1",
           url: "/blog/fmap-paper-atlas"
         },
         {
@@ -134,7 +143,7 @@ export const siteConfig = {
       ]
     },
     {
-      company: "Independent",
+      company: " ",
       title: "Private Tutor — Mathematics and Physics",
       dateRange: "2017–Present",
       bullets: [
@@ -149,8 +158,8 @@ export const siteConfig = {
       degree: "Doctor of Philosophy (PhD)",
       dateRange: "2022–Present",
       achievements: [
-        "Physics PhD based in London.",
-        "Research in deep learning, Hamiltonian dynamics, stochastic modelling, and astrophysical dynamical systems.",
+        "Astrophysics PhD based at Mullard Space Science Laboratory (MSSL).",
+        "Research in deep learning, Hamiltonian dynamics, stochastic modelling, and Galactic dynamics.",
         "Supported by the UCL Graduate Research Scholarship (GRS)."
       ]
     },
@@ -170,7 +179,7 @@ export const siteConfig = {
       title: "Learning action-angle coordinates with a Koopman-inspired symplectic autoencoder",
       status: "New",
       description:
-        "A short research note on learning action-angle coordinates and orbital frequencies from trajectories with a symplectic Koopman-style autoencoder, showing only the 1D harmonic-oscillator and isothermal-slab tests for now.",
+        "A short research note on learning action-angle coordinates and orbital frequencies from trajectories with a symplectic Koopman autoencoder, showing only the 1D harmonic oscillator and isothermal slab tests for now.",
       url: "/blog/aakoopman-action-angle-kooopman"
     },
     {
@@ -182,9 +191,9 @@ export const siteConfig = {
     },
     {
       title: "Building FMAP: an interactive astro-ph paper atlas with embeddings, UMAP, and arXiv metadata",
-      status: "New",
+      status: " ",
       description:
-        "A full write-up of the FMAP project: arXiv ingestion, TF-IDF + LinearSVC classification, sentence-transformer embeddings, UMAP map construction, evaluation plots, and an embedded interactive atlas.",
+        "A write-up of the FMAP project: arXiv ingestion, TF-IDF + LinearSVC classification, sentence-transformer embeddings, UMAP map construction, evaluation plots, and an embedded interactive map.",
       url: "/blog/fmap-paper-atlas"
     },
   ],

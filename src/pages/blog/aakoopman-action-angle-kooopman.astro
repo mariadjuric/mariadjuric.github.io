@@ -81,7 +81,7 @@ const pageDescription =
           <h2 class="text-3xl font-bold text-gray-900">Why action-angle coordinates matter</h2>
           <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
             <p>
-              Action-angle coordinates are one of the most natural languages for regular Hamiltonian motion. In integrable systems, the actions are constants of motion, while the angles evolve linearly in time. That makes them extremely useful both for equilibrium modelling and for studying disequilibrium structure in the Milky Way.
+              Action-angle coordinates are one of the most natural coordinate systems for regular Hamiltonian motion. In integrable systems, the actions are constants of motion, while the angles evolve linearly in time. That makes them extremely useful both for equilibrium modelling and for studying disequilibrium structure in the Milky Way.
             </p>
             <p>
               In Galactic dynamics, these coordinates are especially valuable because distribution functions are often written in terms of the actions, and because action-angle structure can reveal moving groups, resonances, phase mixing, spiral features, and bar-driven dynamics much more cleanly than ordinary phase-space coordinates alone. The difficulty is that action-angle coordinates are only known analytically in a few ideal potentials.
@@ -94,7 +94,7 @@ const pageDescription =
 
         <section class="mt-16 grid gap-8 lg:grid-cols-[1.05fr,0.95fr]">
           <div>
-            <h2 class="text-3xl font-bold text-gray-900">The idea in one paragraph</h2>
+            <h2 class="text-3xl font-bold text-gray-900">Building a neural network</h2>
             <p class="mt-4 text-lg leading-8 text-gray-700">
               The model is a symplectic autoencoder. It learns an invertible map from phase-space coordinates into a latent space where each degree of freedom is represented by a two-dimensional plane. In that latent space, the dynamics are constrained to look like simple rotations, so the radius of each latent pair behaves like an action and the phase behaves like an angle.
             </p>
@@ -107,10 +107,10 @@ const pageDescription =
             <ul class="mt-4 space-y-3 text-gray-700">
               <li><strong>Encoder/decoder:</strong> symplectic normalising-flow style network</li>
               <li><strong>Latent dynamics:</strong> planar rotations</li>
-              <li><strong>Actions:</strong> latent radii, with J_j = r_j^2 / 2</li>
+              <li><strong>Actions:</strong> latent radii, with J<sub>j</sub>  = r<sub>j</sub> ^2 / 2</li>
               <li><strong>Angles:</strong> latent phases</li>
-              <li><strong>Frequencies:</strong> learned frequency map Omega(J)</li>
-              <li><strong>Energy map:</strong> learned scalar Hamiltonian surrogate H(J)</li>
+              <li><strong>Frequencies:</strong> learned frequency map &Omega(J)</li>
+              <li><strong>Energy map:</strong> learned scalar Hamiltonian H(J)</li>
             </ul>
           </aside>
         </section>
@@ -146,7 +146,7 @@ const pageDescription =
           <h2 class="text-3xl font-bold text-gray-900">Model construction</h2>
           <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
             <p>
-              I am skipping most of the training details here, but the architecture matters. The encoder is built from symplectic coupling layers, so the learned map is invertible and structure-preserving by construction. The decoder is simply the inverse map. That helps separate two different questions: whether the representation itself is good, and whether the learned latent evolution is good.
+              I am skipping most of the training details here, but the architecture matters. The encoder is built from symplectic coupling layers, so the learned map is invertible and structure-preserving by construction. The decoder is simply the inverse map. That helps separate two different questions: the quality of the latent representation and the quality of time evolution in this latent space.
             </p>
             <p>
               In one dimension, the model is relatively small: an 8-layer symplectic encoder/decoder, plus compact MLPs for the frequency map and the Hamiltonian regressor. The two validation problems are a harmonic oscillator, where the action-angle structure is analytically known, and an isothermal slab, where the frequency varies non-trivially with action.

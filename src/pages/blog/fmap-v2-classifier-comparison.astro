@@ -58,7 +58,7 @@ const classDeltas = [
           </h1>
           <p class="mt-6 max-w-4xl text-lg leading-8 text-gray-700">
             FMAP started with a deliberately simple classifier: TF-IDF features over paper titles and abstracts, followed by a LinearSVC.
-            That was a sensible baseline. But once the project grew into real astro-ph ingestion, semantic retrieval, and an interactive paper atlas,
+            That was a sensible baseline. But once the project grew into real astro-ph ingestion, semantic retrieval, and an interactive paper map,
             it made sense to test a more expressive classifier too. This post compares the original v1 baseline against the new v2 SciBERT fine-tuning path on the same astro-ph arXiv dataset.
           </p>
           <div class="mt-6 flex flex-wrap gap-3 text-sm text-gray-600">
@@ -268,7 +268,7 @@ const classDeltas = [
           <h2 class="text-3xl font-bold text-gray-900">Method, a bit more formally</h2>
           <p class="mt-4 text-lg leading-8 text-gray-700">
             There are really two mathematical stories in FMAP. The first is the supervised classifier, where the goal is to assign each paper to one astro-ph label.
-            The second is the embedding-and-map pipeline, where the goal is to preserve semantic neighborhoods well enough for search and visualization.
+            The second is the embedding-and-map pipeline, where the goal is to preserve semantic neighbourhoods well enough for search and visualization.
           </p>
 
           <div class="mt-8 grid gap-6 lg:grid-cols-2">
@@ -342,7 +342,7 @@ const classDeltas = [
           </div>
 
           <p class="mt-8 text-lg leading-8 text-gray-700">
-            UMAP then takes the dense embedding geometry and produces a two-dimensional representation that tries to preserve local neighborhood structure. That is why it is useful for the atlas:
+            UMAP then takes the dense embedding geometry and produces a two-dimensional representation that tries to preserve local neighborhood structure. That is why it is useful for the mapping:
             the objective is not just a pretty scatter plot, but a map where nearby papers tend to be semantically related.
           </p>
         </section>
@@ -377,17 +377,13 @@ const classDeltas = [
             The best part of this comparison is not just that v2 wins. It is that FMAP now has a more honest and useful project structure.
             There is a baseline that is cheap, explainable, and worth keeping. And there is a stronger contextual model that performs better on the same real astro-ph pipeline.
           </p>
-          <p class="mt-4 text-lg leading-8 text-gray-700">
-            That is the kind of progression I like in portfolio work: start with the simple method that earns its place, then add complexity only when it buys something real.
-            In this case, it does.
-          </p>
         </section>
 
         <section class="mt-16">
           <h2 class="text-3xl font-bold text-gray-900">References and useful papers</h2>
           <p class="mt-4 text-lg leading-8 text-gray-700">
             If I were extending this project further, these are the papers I would keep closest to hand. They are the most relevant references for the transformer classifier,
-            the embedding setup, the baseline model choice, and the geometry of the atlas itself.
+            the embedding setup, the baseline model choice, and the geometry of the map itself.
           </p>
           <div class="mt-8 space-y-5 rounded-3xl border border-gray-200 bg-white p-8 shadow-sm text-gray-700">
             <p>
