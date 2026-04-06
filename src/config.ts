@@ -78,12 +78,6 @@ export const siteConfig = {
       ],
       skills: ["Python", "NLP Embeddings", "UMAP", "Astrophysics", "Interactive Visualization"]
     },
-    {
-      name: "Deep Learning for Hamiltonian Dynamics",
-      description:
-        "Research project at UCL developing Koopman autoencoder and symplectic learning models to recover action-angle coordinates from Hamiltonian trajectories, with benchmarking against analytical and numerical methods down to very small errors.",
-      skills: ["PyTorch", "Dynamical Systems", "Action-Angle Coordinates", "Model Evaluation"]
-    },
   ],
   awards: [
     {
