@@ -107,10 +107,10 @@ const pageDescription =
             <ul class="mt-4 space-y-3 text-gray-700">
               <li><strong>Encoder/decoder:</strong> symplectic normalising-flow style network</li>
               <li><strong>Latent dynamics:</strong> planar rotations</li>
-              <li><strong>Actions:</strong> latent radii, with J<sub>j</sub>  = r<sub>j</sub> ^2 / 2</li>
+              <li><strong>Actions:</strong> latent radii, with <code>J<sub>j</sub> = r<sub>j</sub><sup>2</sup> / 2</code></li>
               <li><strong>Angles:</strong> latent phases</li>
-              <li><strong>Frequencies:</strong> learned frequency map &Omega(J)</li>
-              <li><strong>Energy map:</strong> learned scalar Hamiltonian H(J)</li>
+              <li><strong>Frequencies:</strong> learned frequency map <code>&Omega;(J)</code></li>
+              <li><strong>Energy map:</strong> learned scalar Hamiltonian <code>H(J)</code></li>
             </ul>
           </aside>
         </section>
@@ -119,7 +119,7 @@ const pageDescription =
           <h2 class="text-3xl font-bold text-gray-900">A short mathematical sketch</h2>
           <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
             <p>
-              The autoencoder learns an encoder Psi and decoder Phi so that phase-space evolution is approximately conjugate to a simpler latent evolution,
+              The autoencoder learns an encoder <code>&Psi;</code> and decoder <code>&Phi;</code> so that phase-space evolution is approximately conjugate to a simpler latent evolution,
             </p>
             <div class="overflow-x-auto rounded-3xl bg-gray-50 px-6 py-6 text-center text-gray-900 shadow-sm">
               <span class="font-serif text-lg">x<sub>k+1</sub> &asymp; &Phi;(K(&Psi;(x<sub>k</sub>)))</span>
@@ -163,13 +163,13 @@ const pageDescription =
             <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
               <h3 class="text-xl font-semibold text-gray-900">Harmonic oscillator</h3>
               <p class="mt-3 leading-7 text-gray-700">
-                Potential: Phi(z) = omega_0^2 z^2 / 2 with omega_0 = 0.5. Here the true frequency is constant, so this is the cleanest sanity check.
+                Potential: <code>&Phi;(z) = &omega;<sub>0</sub><sup>2</sup> z<sup>2</sup> / 2</code> with <code>&omega;<sub>0</sub> = 0.5</code>. Here the true frequency is constant, so this is the cleanest sanity check.
               </p>
             </div>
             <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
               <h3 class="text-xl font-semibold text-gray-900">Isothermal slab</h3>
               <p class="mt-3 leading-7 text-gray-700">
-                Potential: Phi(z) = 2 sigma^2 log(cosh(z / 2 z_0)) with sigma = 1 and z_0 = 1. This is more interesting because the oscillation frequency decreases with action.
+                Potential: <code>&Phi;(z) = 2&sigma;<sup>2</sup> log(cosh(z / 2z<sub>0</sub>))</code> with <code>&sigma; = 1</code> and <code>z<sub>0</sub> = 1</code>. This is more interesting because the oscillation frequency decreases with action.
               </p>
             </div>
           </div>
@@ -201,11 +201,17 @@ const pageDescription =
           <p class="mt-4 text-lg leading-8 text-gray-700">
             The most important qualitative check is whether the learned action stays nearly constant along each orbit, while the learned angle tracks a linearly advancing variable. That is exactly what the model recovers in both 1D examples.
           </p>
+          <figure class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <img src="/images/blog/aakoopman/anim_isothermal_latent_training.gif" alt="Animated latent-space evolution for the 1D isothermal slab test" class="w-full" />
+            <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+              <strong>Latent-space evolution during the 1D test.</strong> This animation shows how the orbit is represented in the learned latent plane as training progresses. The useful thing to watch is that the trajectory settles into an almost circular rotation with an approximately fixed radius. That is the action-angle picture the model is trying to learn: the radius behaves like the conserved action <code>J</code>, while the steadily advancing phase behaves like the angle variable <code>&theta;</code>.
+            </figcaption>
+          </figure>
           <div class="mt-8 grid gap-10 lg:grid-cols-2">
             <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
               <img src="/images/blog/aakoopman/phasespace_HO_unsup.png" alt="Harmonic oscillator phase space with learned actions and angles" class="w-full" />
               <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
-                <strong>Harmonic oscillator.</strong> The learned angle closely tracks the analytic angle, and the learned action remains effectively constant along the trajectory. In this 1D test, the mean-square errors are approximately 10^-9 for the frequency and 10^-7 for the action.
+                <strong>Harmonic oscillator.</strong> The learned angle closely tracks the analytic angle, and the learned action remains effectively constant along the trajectory. In this 1D test, the mean-square errors are approximately <code>10<sup>-9</sup></code> for the frequency and <code>10<sup>-7</sup></code> for the action.
               </figcaption>
             </figure>
             <figure class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
@@ -243,7 +249,7 @@ const pageDescription =
               Another useful check is to separate reconstruction quality from dynamical prediction. If a state is encoded and immediately decoded, the reconstruction is essentially exact up to numerical precision. That confirms that prediction errors are driven by the learned latent evolution and frequency map, not by a failure of invertibility in the symplectic encoder-decoder pair.
             </p>
             <p>
-              In the harmonic oscillator, the learned inverse map can also be used to generate an orbit directly from an initial action-angle point. The decoded trajectory stays close to the analytic solution, with residuals at the 10^-3 level and no obvious secular drift over multiple periods.
+              In the harmonic oscillator, the learned inverse map can also be used to generate an orbit directly from an initial action-angle point. The decoded trajectory stays close to the analytic solution, with residuals at the <code>10<sup>-3</sup></code> level and no obvious secular drift over multiple periods.
             </p>
           </div>
           <div class="mt-8 grid gap-10 lg:grid-cols-2">
@@ -261,9 +267,9 @@ const pageDescription =
             </figure>
           </div>
           <figure class="mt-10 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
-            <img src="/images/blog/aakoopman/inverse_rollout_HO_unsup.png" alt="Harmonic oscillator rollout generated from learned inverse map" class="w-full" />
+            <img src="/images/blog/aakoopman/anim_inverse_rollout_ho.gif" alt="Animated harmonic oscillator rollout generated from the learned inverse map" class="w-full" />
             <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
-              <strong>Inverse rollout in the harmonic oscillator.</strong> Starting from an initial action-angle point, the model generates a stable decoded orbit that remains close to the analytic trajectory, with residuals typically around 10^-3.
+              <strong>Animated inverse rollout in the harmonic oscillator.</strong> Starting from an initial action-angle point, the model generates a decoded orbit that stays close to the analytic trajectory over multiple periods. The animation shows the reconstruction directly: the learned latent rotation decodes into a smooth physical orbit with no obvious secular drift, and the residuals stay at roughly the <code>10<sup>-3</sup></code> level.
             </figcaption>
           </figure>
         </section>
