@@ -111,6 +111,85 @@ img {
   backdrop-filter: blur(14px);
 }
 
+.blog-page {
+  color: var(--text);
+}
+
+.blog-page a {
+  color: inherit;
+}
+
+.blog-shell {
+  background: linear-gradient(180deg, rgba(10, 16, 32, 0.5), rgba(6, 10, 20, 0.24));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 2rem;
+  padding: clamp(1.25rem, 2vw, 2rem);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(10px);
+}
+
+.blog-page .text-gray-900 {
+  color: #f7f9ff !important;
+}
+
+.blog-page .text-gray-800 {
+  color: rgba(240, 244, 255, 0.9) !important;
+}
+
+.blog-page .text-gray-700,
+.blog-page .text-gray-600 {
+  color: rgba(232, 238, 255, 0.72) !important;
+}
+
+.blog-page .text-gray-500 {
+  color: rgba(232, 238, 255, 0.5) !important;
+}
+
+.blog-page .border-gray-200,
+.blog-page .divide-gray-200 {
+  border-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+.blog-page .bg-white,
+.blog-page .bg-gray-50,
+.blog-page .bg-gray-100 {
+  background: linear-gradient(180deg, rgba(15, 22, 38, 0.86), rgba(8, 13, 25, 0.88)) !important;
+}
+
+.blog-page .shadow-sm {
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28) !important;
+}
+
+.blog-page .rounded-3xl,
+.blog-page .rounded-2xl {
+  overflow: hidden;
+}
+
+.blog-page code {
+  color: #f2f5ff;
+}
+
+.blog-page iframe {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.blog-page table {
+  color: rgba(232, 238, 255, 0.78);
+}
+
+.blog-page thead {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.blog-page td,
+.blog-page th {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.blog-page .underline {
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+}
+
 .math-block .katex-display {
   margin: 0;
 }
