@@ -7,19 +7,17 @@ const hasAwards = siteConfig.awards && siteConfig.awards.length > 0;
 const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
 ---
 
-<header id="header" class="fixed inset-x-0 top-0 z-50 hidden transition-all duration-300 md:block">
-  <nav class="mx-auto max-w-7xl px-8 py-5">
-    <div class="glass-card flex items-center justify-between rounded-full px-6 py-3.5 shadow-sm">
-      <a href="#hero" class="text-sm font-semibold uppercase tracking-[0.24em] text-white/78 transition-colors hover:text-white">
-        {siteConfig.name}
-      </a>
-      <ul class="flex items-center gap-6 text-sm font-medium text-white/72">
-        <li><a href="#about" class="transition-colors hover:text-white">About</a></li>
-        {hasBlog && <li><a href="#blog" class="transition-colors hover:text-white">Blog</a></li>}
-        {hasAwards && <li><a href="#awards" class="transition-colors hover:text-white">Awards</a></li>}
-        {hasExperience && <li><a href="#experience" class="transition-colors hover:text-white">Experience</a></li>}
-        {hasEducation && <li><a href="#education" class="transition-colors hover:text-white">Education</a></li>}
-      </ul>
-    </div>
+<header id="header" class="site-header fixed inset-x-0 top-0 z-50 hidden md:block">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between px-8 py-5 text-sm font-medium text-white/72">
+    <a href="#hero" class="text-sm font-semibold uppercase tracking-[0.24em] text-white/78 transition-colors hover:text-white">
+      {siteConfig.name}
+    </a>
+    <ul class="flex items-center gap-6">
+      <li><a href="#about" class="transition-colors hover:text-white">About</a></li>
+      {hasBlog && <li><a href="#blog" class="transition-colors hover:text-white">Blog</a></li>}
+      {hasAwards && <li><a href="#awards" class="transition-colors hover:text-white">Awards</a></li>}
+      {hasExperience && <li><a href="#experience" class="transition-colors hover:text-white">Experience</a></li>}
+      {hasEducation && <li><a href="#education" class="transition-colors hover:text-white">Education</a></li>}
+    </ul>
   </nav>
 </header>

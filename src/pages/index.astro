@@ -37,6 +37,9 @@ import "../styles/global.css";
 
     <script is:inline>
       const progressBar = document.getElementById('page-progress-bar');
+      const header = document.getElementById('header');
+      let lastScrollY = window.scrollY || window.pageYOffset;
+
       const updateProgress = () => {
         if (!progressBar) return;
         const scrollTop = window.scrollY || window.pageYOffset;
@@ -44,8 +47,31 @@ import "../styles/global.css";
         const progress = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
         progressBar.style.height = `${progress}%`;
       };
+
+      const updateHeader = () => {
+        if (!header) return;
+        const currentY = window.scrollY || window.pageYOffset;
+        const delta = currentY - lastScrollY;
+
+        if (currentY < 40) {
+          header.classList.remove('is-hidden');
+        } else if (delta > 6) {
+          header.classList.add('is-hidden');
+        } else if (delta < -6) {
+          header.classList.remove('is-hidden');
+        }
+
+        lastScrollY = currentY;
+      };
+
+      const onScroll = () => {
+        updateProgress();
+        updateHeader();
+      };
+
       updateProgress();
-      window.addEventListener('scroll', updateProgress, { passive: true });
+      updateHeader();
+      window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', updateProgress);
     </script>
   </body>
