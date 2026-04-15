@@ -84,13 +84,13 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
               </div>
 
               <div>
-                <div class="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))]">
-                  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(98,127,47,0.18),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.06),transparent_24%)]"></div>
+                <div class="relative overflow-hidden rounded-[2rem] border border-white/6 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.10),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(98,127,47,0.10),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] shadow-[0_24px_80px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+                  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(98,127,47,0.14),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.04),transparent_24%)]"></div>
                   {useFmapEmbed ? (
                     <iframe
                       src="/fmap/embed.html"
                       title={`${post.title} interactive FMAP preview`}
-                      class="relative aspect-[1.2/1] w-full border-0 bg-black"
+                      class="relative aspect-[1.2/1] w-full border-0 bg-transparent"
                       loading="lazy"
                     ></iframe>
                   ) : isVideoPreview ? (
@@ -105,11 +105,13 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
                       preload="metadata"
                     ></video>
                   ) : post.previewImage ? (
-                    <img
-                      src={post.previewImage}
-                      alt={post.previewAlt ?? post.title}
-                      class="relative aspect-[1.2/1] w-full object-cover transition duration-500 ease-out hover:scale-[1.02]"
-                    />
+                    <div class="relative aspect-[1.2/1] w-full p-6 md:p-8">
+                      <img
+                        src={post.previewImage}
+                        alt={post.previewAlt ?? post.title}
+                        class="h-full w-full object-contain transition duration-500 ease-out hover:scale-[1.02]"
+                      />
+                    </div>
                   ) : (
                     <div class="relative flex aspect-[1.2/1] items-end p-8">
                       <div>

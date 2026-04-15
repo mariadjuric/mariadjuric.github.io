@@ -101,6 +101,7 @@
     const payload = window.FMAP_DATA || { points: [], colors: {}, counts: {}, stats: { papers: 0, categories: 0 } };
     const points = payload.points || [];
     const byId = new Map(points.map(p => [p.id, p]));
+    const shell = document.querySelector('.shell');
     const baseCanvas = document.getElementById('atlasBase');
     const overlayCanvas = document.getElementById('atlasOverlay');
     const baseCtx = baseCanvas.getContext('2d', { alpha: true });
@@ -243,8 +244,9 @@
       recomputePositions(); drawBase(); drawOverlay();
     }
 
-    baseCanvas.addEventListener('wheel', (event) => {
+    shell.addEventListener('wheel', (event) => {
       event.preventDefault();
+      event.stopPropagation();
       const factor = event.deltaY > 0 ? 0.92 : 1.09;
       zoomBy(factor);
     }, { passive: false });
