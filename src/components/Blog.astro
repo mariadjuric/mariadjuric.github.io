@@ -25,6 +25,7 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
             link.label.toLowerCase().includes("github")
           );
           const useFmapEmbed = post.url === "/blog/fmap-paper-atlas";
+          const isVideoPreview = post.previewImage?.endsWith(".mp4");
 
           return (
             <article
@@ -92,6 +93,17 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
                       class="relative aspect-[1.2/1] w-full border-0 bg-black"
                       loading="lazy"
                     ></iframe>
+                  ) : isVideoPreview ? (
+                    <video
+                      src={post.previewImage}
+                      aria-label={post.previewAlt ?? post.title}
+                      class="relative aspect-[1.2/1] w-full object-cover"
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                    ></video>
                   ) : post.previewImage ? (
                     <img
                       src={post.previewImage}
