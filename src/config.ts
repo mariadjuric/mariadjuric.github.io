@@ -176,8 +176,8 @@ export const siteConfig = {
       description:
         "A short research note on learning action-angle coordinates and orbital frequencies from trajectories with a symplectic Koopman autoencoder, showing only the 1D harmonic oscillator and isothermal slab tests for now.",
       url: "/blog/aakoopman-action-angle-kooopman",
-      previewImage: "/images/blog/aakoopman/anim_isothermal_latent_training.gif",
-      previewAlt: "Animated latent-space training preview for the Koopman-inspired symplectic autoencoder",
+      previewImage: "/images/blog/aakoopman/anim_isothermal_latent_training_dark.gif",
+      previewAlt: "Animated latent-space training preview for the Koopman-inspired symplectic autoencoder on a dark background", 
       previewEyebrow: "Koopman-inspired symplectic learning"
     },
     {
