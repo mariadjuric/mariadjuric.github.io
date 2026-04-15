@@ -87,12 +87,21 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
                 <div class="relative overflow-hidden rounded-[2rem] border border-white/6 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.10),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(98,127,47,0.10),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] shadow-[0_24px_80px_rgba(0,0,0,0.16)] backdrop-blur-xl">
                   <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(98,127,47,0.14),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.04),transparent_24%)]"></div>
                   {useFmapEmbed ? (
-                    <iframe
-                      src="/fmap/embed.html"
-                      title={`${post.title} interactive FMAP preview`}
-                      class="relative aspect-[1.2/1] w-full border-0 bg-transparent"
-                      loading="lazy"
-                    ></iframe>
+                    <div class="relative aspect-[1.2/1] w-full">
+                      <div class="absolute inset-0 z-10 flex items-center justify-center bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),rgba(255,255,255,0.01))] text-center text-white/58 transition-opacity duration-500" data-fmap-loading>
+                        <div>
+                          <div class="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-white/14 border-t-[#8fb84f]"></div>
+                          <p class="mt-4 text-sm uppercase tracking-[0.22em]">Loading FMAP</p>
+                        </div>
+                      </div>
+                      <iframe
+                        src="/fmap/embed.html"
+                        title={`${post.title} interactive FMAP preview`}
+                        class="relative z-0 h-full w-full border-0 bg-transparent"
+                        loading="lazy"
+                        onload="const loader=this.parentElement?.querySelector('[data-fmap-loading]'); if(loader){ loader.style.opacity='0'; setTimeout(()=>loader.remove(), 350); }"
+                      ></iframe>
+                    </div>
                   ) : isVideoPreview ? (
                     <video
                       src={post.previewImage}
