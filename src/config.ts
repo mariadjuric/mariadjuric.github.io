@@ -18,7 +18,6 @@ export const siteConfig = {
   aboutMe: [
     "I'm a Physics PhD researcher at University College London with a background in mathematics, physics, and scientific computing. My work sits between theory and computation: I like building models from abstract mathematical principles, that are numerically reliable, and actually useful in practice.",
     "Recently I've been focusing on deep learning for Hamiltonian dynamics and action-angle coordinates, alongside broader quantitative modelling in nonlinear diffusion, stochastic calculus, and dynamical systems. I'm especially interested in interpretable machine learning for physical systems, efficient simulation pipelines, and research tools that make complicated models easier to test and trust.",
-  
   ],
   skills: [
     "Python",
@@ -42,15 +41,14 @@ export const siteConfig = {
       name: "AAKoopmanTrain",
       description:
         "PyTorch model for learning action-angle coordinates and Hamiltonian dynamics with Koopman autoencoder and symplectic deep learning approaches. Built to support reusable training, evaluation, diagnostics, and reproducible comparison against analytical and numerical baselines.",
+      previewImage: "/profile.png",
+      previewAlt: "Portrait placeholder for AAKoopmanTrain preview",
+      previewEyebrow: "Hamiltonian dynamics · Deep learning",
       links: [
         {
           label: "Blog",
           url: "/blog/aakoopman-action-angle-kooopman"
         },
-        // {
-        //   label: "GitHub",
-        //   url: "https://github.com/mariadjuric/AAKoopmanTrain"
-        // }
       ],
       skills: ["PyTorch", "Deep Learning", "Hamiltonian Dynamics", "PhD Research"]
     },
@@ -58,6 +56,9 @@ export const siteConfig = {
       name: "FMAP: FindMyArxivPaper",
       description:
         "An paper-finder that fetches astro-ph papers from arXiv, embeds title+abstract text, trains a category classifier, evaluates retrieval, and generates an interactive UMAP-based HTML map for browsing scientific papers as a dense local map.",
+      previewImage: "/images/blog/fmap-embedding-projection.png",
+      previewAlt: "FMAP embedding projection visualisation",
+      previewEyebrow: "Embeddings · UMAP · Interactive atlas",
       links: [
         {
           label: "Blog v2",
@@ -174,21 +175,30 @@ export const siteConfig = {
       status: "New",
       description:
         "A short research note on learning action-angle coordinates and orbital frequencies from trajectories with a symplectic Koopman autoencoder, showing only the 1D harmonic oscillator and isothermal slab tests for now.",
-      url: "/blog/aakoopman-action-angle-kooopman"
+      url: "/blog/aakoopman-action-angle-kooopman",
+      previewImage: "/profile.png",
+      previewAlt: "Placeholder preview for action-angle coordinates blog post",
+      previewEyebrow: "Koopman-inspired symplectic learning"
     },
     {
       title: "FMAP v2: comparing a SciBERT classifier against the v1 TF-IDF baseline on astro-ph arXiv data",
       status: "New",
       description:
         "A side-by-side comparison of FMAP v1 and v2 on real astro-ph arXiv ingestion data, covering accuracy, macro F1, per-class differences, and the practical tradeoffs between a fast classical baseline and transformer fine-tuning.",
-      url: "/blog/fmap-v2-classifier-comparison"
+      url: "/blog/fmap-v2-classifier-comparison",
+      previewImage: "/images/blog/fmap-v1-v2-headline-metrics.png",
+      previewAlt: "Comparison metrics for FMAP v1 and v2",
+      previewEyebrow: "Classifier comparison · metrics"
     },
     {
       title: "Building FMAP: an interactive astro-ph paper atlas with embeddings, UMAP, and arXiv metadata",
       status: " ",
       description:
         "A write-up of the FMAP project: arXiv ingestion, TF-IDF + LinearSVC classification, sentence-transformer embeddings, UMAP map construction, evaluation plots, and an embedded interactive map.",
-      url: "/blog/fmap-paper-atlas"
+      url: "/blog/fmap-paper-atlas",
+      previewImage: "/images/blog/fmap-embedding-projection.png",
+      previewAlt: "FMAP embedding projection map",
+      previewEyebrow: "Paper atlas · embeddings · UMAP"
     },
   ],
   footerNote:

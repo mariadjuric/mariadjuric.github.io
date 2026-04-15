@@ -65,6 +65,53 @@ import "../styles/global.css";
           if (!inside) modal.close();
         });
       });
+
+      const previewImage = document.getElementById('blog-preview-image');
+      const previewTitle = document.getElementById('blog-preview-title');
+      const previewDescription = document.getElementById('blog-preview-description');
+      const previewEyebrow = document.getElementById('blog-preview-eyebrow');
+      const previewCards = document.querySelectorAll('.blog-preview-trigger');
+
+      const updatePreview = (card) => {
+        if (!previewImage || !previewTitle || !previewDescription || !previewEyebrow || !card) return;
+        const image = card.getAttribute('data-preview-image') || '/profile.png';
+        const alt = card.getAttribute('data-preview-alt') || card.getAttribute('data-preview-title') || 'Preview image';
+        const title = card.getAttribute('data-preview-title') || '';
+        const description = card.getAttribute('data-preview-description') || '';
+        const eyebrow = card.getAttribute('data-preview-eyebrow') || 'Featured preview';
+
+        previewImage.style.opacity = '0.35';
+        window.setTimeout(() => {
+          previewImage.setAttribute('src', image);
+          previewImage.setAttribute('alt', alt);
+          previewTitle.textContent = title;
+          previewDescription.textContent = description;
+          previewEyebrow.textContent = eyebrow;
+          previewImage.style.opacity = '1';
+        }, 120);
+      };
+
+      previewCards.forEach((card) => {
+        card.addEventListener('mouseenter', () => updatePreview(card));
+        card.addEventListener('focus', () => updatePreview(card));
+      });
+
+      if ('IntersectionObserver' in window && previewCards.length) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const visible = entries
+              .filter((entry) => entry.isIntersecting)
+              .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+            if (visible[0]) updatePreview(visible[0].target);
+          },
+          {
+            threshold: [0.35, 0.6, 0.85],
+            rootMargin: '-15% 0px -35% 0px',
+          }
+        );
+
+        previewCards.forEach((card) => observer.observe(card));
+      }
     </script>
   </body>
 </html>
