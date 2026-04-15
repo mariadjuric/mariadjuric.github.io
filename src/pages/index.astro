@@ -33,5 +33,38 @@ import "../styles/global.css";
       <Education />
     </main>
     <Footer />
+
+    <script is:inline>
+      const openers = document.querySelectorAll('[data-modal-open]');
+      const closers = document.querySelectorAll('[data-modal-close]');
+
+      openers.forEach((button) => {
+        button.addEventListener('click', () => {
+          const id = button.getAttribute('data-modal-open');
+          const modal = id ? document.getElementById(id) : null;
+          if (modal && typeof modal.showModal === 'function') modal.showModal();
+        });
+      });
+
+      closers.forEach((button) => {
+        button.addEventListener('click', () => {
+          const id = button.getAttribute('data-modal-close');
+          const modal = id ? document.getElementById(id) : null;
+          if (modal && typeof modal.close === 'function') modal.close();
+        });
+      });
+
+      document.querySelectorAll('dialog').forEach((modal) => {
+        modal.addEventListener('click', (event) => {
+          const rect = modal.getBoundingClientRect();
+          const inside =
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom;
+          if (!inside) modal.close();
+        });
+      });
+    </script>
   </body>
 </html>

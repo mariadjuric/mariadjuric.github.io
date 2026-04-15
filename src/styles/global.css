@@ -1,22 +1,114 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
+  --bg: #050816;
+  --bg-soft: #0a1020;
+  --surface: rgba(11, 17, 32, 0.72);
+  --surface-strong: rgba(14, 22, 40, 0.88);
+  --surface-border: rgba(255, 255, 255, 0.09);
+  --text: #eef2ff;
+  --text-soft: rgba(232, 238, 255, 0.72);
+  --text-muted: rgba(232, 238, 255, 0.5);
 }
 
 html {
-  background: white;
+  background:
+    radial-gradient(circle at top left, rgba(98, 127, 47, 0.22), transparent 28%),
+    radial-gradient(circle at 85% 15%, rgba(108, 92, 231, 0.12), transparent 22%),
+    linear-gradient(180deg, #04070f 0%, #070b16 30%, #050816 100%);
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #111827;
-  background: #ffffff;
+  color: var(--text);
+  background: transparent;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(98, 127, 47, 0.12), transparent 22%),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.05), transparent 18%),
+    radial-gradient(circle at 50% 80%, rgba(98, 127, 47, 0.08), transparent 28%);
+  z-index: 0;
+}
+
+main,
+header,
+footer {
+  position: relative;
+  z-index: 1;
 }
 
 a {
   text-decoration: none;
+}
+
+img {
+  display: block;
+}
+
+::selection {
+  background: rgba(98, 127, 47, 0.35);
+  color: white;
+}
+
+.section-shell {
+  position: relative;
+}
+
+.section-shell::before {
+  content: "";
+  position: absolute;
+  inset: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 2rem;
+  pointer-events: none;
+}
+
+.glass-card {
+  background: linear-gradient(180deg, rgba(15, 22, 38, 0.86), rgba(8, 13, 25, 0.88));
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+.soft-panel {
+  background: linear-gradient(180deg, rgba(10, 16, 32, 0.7), rgba(8, 12, 24, 0.4));
+}
+
+.hover-lift {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.section-kicker {
+  color: var(--text-muted);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.modal-backdrop {
+  background: rgba(3, 6, 14, 0.72);
+  backdrop-filter: blur(14px);
 }
 
 .math-block .katex-display {
@@ -32,7 +124,6 @@ a {
   overflow-y: hidden;
   padding: 0.1rem 0;
 }
-
 
 article code {
   font-family: "STIX Two Text", "Times New Roman", Georgia, serif;
@@ -52,4 +143,18 @@ article h4 code,
 article h5 code,
 article h6 code {
   white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hover-lift {
+    transition: none;
+  }
+
+  .hover-lift:hover {
+    transform: none;
+  }
 }

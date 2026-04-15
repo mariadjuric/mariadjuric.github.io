@@ -10,24 +10,18 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
 
 <header id="header" class="fixed inset-x-0 top-0 z-50 hidden transition-all duration-300 md:block">
   <nav class="mx-auto max-w-7xl px-8 py-5">
-    <div class="flex items-center justify-between rounded-full border border-gray-200 bg-white/85 px-6 py-3 shadow-sm backdrop-blur">
-      <a href="#hero" class="text-sm font-semibold uppercase tracking-[0.22em] text-gray-700">
+    <div class="glass-card flex items-center justify-between rounded-full px-6 py-3.5 shadow-sm">
+      <a href="#hero" class="text-sm font-semibold uppercase tracking-[0.24em] text-white/78 transition-colors hover:text-white">
         {siteConfig.name}
       </a>
-      <ul class="flex items-center gap-6 text-sm font-medium text-gray-700">
-        <li><a href="#about" class="transition-colors hover:text-black">About</a></li>
-        {hasProjects && <li><a href="#projects" class="transition-colors hover:text-black">Projects</a></li>}
-        {hasBlog && <li><a href="#blog" class="transition-colors hover:text-black">Blog</a></li>}
-        {hasAwards && <li><a href="#awards" class="transition-colors hover:text-black">Awards</a></li>}
-        {hasExperience && <li><a href="#experience" class="transition-colors hover:text-black">Experience</a></li>}
-        {hasEducation && <li><a href="#education" class="transition-colors hover:text-black">Education</a></li>}
+      <ul class="flex items-center gap-6 text-sm font-medium text-white/72">
+        <li><a href="#about" class="transition-colors hover:text-white">About</a></li>
+        {hasProjects && <li><a href="#projects" class="transition-colors hover:text-white">Projects</a></li>}
+        {hasBlog && <li><a href="#blog" class="transition-colors hover:text-white">Blog</a></li>}
+        {hasAwards && <li><a href="#awards" class="transition-colors hover:text-white">Awards</a></li>}
+        {hasExperience && <li><a href="#experience" class="transition-colors hover:text-white">Experience</a></li>}
+        {hasEducation && <li><a href="#education" class="transition-colors hover:text-white">Education</a></li>}
       </ul>
     </div>
   </nav>
 </header>
-
-<style>
-  html {
-    scroll-behavior: smooth;
-  }
-</style>
