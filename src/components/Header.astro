@@ -1,7 +1,6 @@
 ---
 import { siteConfig } from "../config";
 
-const hasProjects = siteConfig.projects && siteConfig.projects.length > 0;
 const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
 const hasEducation = siteConfig.education && siteConfig.education.length > 0;
 const hasAwards = siteConfig.awards && siteConfig.awards.length > 0;
@@ -16,7 +15,6 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
       </a>
       <ul class="flex items-center gap-6 text-sm font-medium text-white/72">
         <li><a href="#about" class="transition-colors hover:text-white">About</a></li>
-        {hasProjects && <li><a href="#projects" class="transition-colors hover:text-white">Projects</a></li>}
         {hasBlog && <li><a href="#blog" class="transition-colors hover:text-white">Blog</a></li>}
         {hasAwards && <li><a href="#awards" class="transition-colors hover:text-white">Awards</a></li>}
         {hasExperience && <li><a href="#experience" class="transition-colors hover:text-white">Experience</a></li>}
