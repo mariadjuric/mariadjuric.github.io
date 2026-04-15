@@ -41,8 +41,8 @@ export const siteConfig = {
       name: "AAKoopmanTrain",
       description:
         "PyTorch model for learning action-angle coordinates and Hamiltonian dynamics with Koopman autoencoder and symplectic deep learning approaches. Built to support reusable training, evaluation, diagnostics, and reproducible comparison against analytical and numerical baselines.",
-      previewImage: "/profile.png",
-      previewAlt: "Portrait placeholder for AAKoopmanTrain preview",
+      previewImage: "/images/blog/aakoopman/anim_inverse_rollout_ho.gif",
+      previewAlt: "Animated inverse rollout for the AAKoopmanTrain project",
       previewEyebrow: "Hamiltonian dynamics · Deep learning",
       links: [
         {
@@ -176,8 +176,8 @@ export const siteConfig = {
       description:
         "A short research note on learning action-angle coordinates and orbital frequencies from trajectories with a symplectic Koopman autoencoder, showing only the 1D harmonic oscillator and isothermal slab tests for now.",
       url: "/blog/aakoopman-action-angle-kooopman",
-      previewImage: "/profile.png",
-      previewAlt: "Placeholder preview for action-angle coordinates blog post",
+      previewImage: "/images/blog/aakoopman/anim_isothermal_latent_training.gif",
+      previewAlt: "Animated latent-space training preview for the Koopman-inspired symplectic autoencoder",
       previewEyebrow: "Koopman-inspired symplectic learning"
     },
     {
