@@ -186,8 +186,8 @@ export const siteConfig = {
       description:
         "A side-by-side comparison of FMAP v1 and v2 on real astro-ph arXiv ingestion data, covering accuracy, macro F1, per-class differences, and the practical tradeoffs between a fast classical baseline and transformer fine-tuning.",
       url: "/blog/fmap-v2-classifier-comparison",
-      previewImage: "/images/blog/fmap-v1-v2-headline-metrics.png",
-      previewAlt: "Comparison metrics for FMAP v1 and v2",
+      previewImage: "/images/blog/fmap-v1-v2-confusion-side-by-side.png",
+      previewAlt: "Side-by-side confusion matrices for FMAP v1 and v2",
       previewEyebrow: "Classifier comparison · metrics"
     },
     {
