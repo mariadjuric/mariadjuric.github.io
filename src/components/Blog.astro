@@ -24,7 +24,7 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
           const githubLink = matchingProject?.links?.find((link) =>
             link.label.toLowerCase().includes("github")
           );
-          const useFmapEmbed = post.url?.includes("/blog/fmap-");
+          const useFmapEmbed = post.url === "/blog/fmap-paper-atlas";
 
           return (
             <article
@@ -87,7 +87,7 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
                   <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(98,127,47,0.18),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.06),transparent_24%)]"></div>
                   {useFmapEmbed ? (
                     <iframe
-                      src="/fmap/index.html"
+                      src="/fmap/embed.html"
                       title={`${post.title} interactive FMAP preview`}
                       class="relative aspect-[1.2/1] w-full border-0 bg-black"
                       loading="lazy"

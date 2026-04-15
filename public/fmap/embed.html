@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FMAP embedded preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #020409;
+      --panel: rgba(10, 15, 28, 0.9);
+      --border: rgba(123, 146, 179, 0.18);
+      --text: #ecf3ff;
+      --muted: #8fa4c7;
+      --shadow: 0 20px 70px rgba(0, 0, 0, 0.38);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, sans-serif; overflow: hidden; }
+    body {
+      background:
+        radial-gradient(circle at 18% 12%, rgba(125, 211, 252, 0.08), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(192, 132, 252, 0.07), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(110, 231, 183, 0.06), transparent 30%),
+        #020409;
+    }
+    .shell { position: relative; width: 100vw; height: 100vh; }
+    canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    #atlasBase { background: radial-gradient(circle at 50% 30%, rgba(31,41,80,.22), transparent 45%), radial-gradient(circle at 50% 100%, rgba(18,31,51,.18), transparent 50%), #030611; }
+    .hint {
+      position: absolute; left: 18px; right: 18px; bottom: 18px;
+      background: rgba(9,14,27,.84); border: 1px solid var(--border); border-radius: 16px;
+      box-shadow: var(--shadow); backdrop-filter: blur(8px); padding: 10px 12px;
+      color: #d7e3f7; font-size: 12px; line-height: 1.45;
+    }
+    .hover-card {
+      position: absolute; display: none; pointer-events: none; z-index: 20; padding: 12px; max-width: 320px;
+      font-size: 13px; background: rgba(9,14,27,.92); border: 1px solid var(--border); border-radius: 16px;
+      box-shadow: var(--shadow); backdrop-filter: blur(8px);
+    }
+    .detail-modal {
+      position: absolute; inset: 20px; display: none; z-index: 30;
+      background: rgba(6, 10, 20, 0.92); border: 1px solid var(--border); border-radius: 22px;
+      box-shadow: var(--shadow); backdrop-filter: blur(12px); overflow: auto;
+    }
+    .detail-inner { padding: 20px; }
+    .close-btn {
+      position: sticky; top: 0; float: right; border: 0; border-radius: 999px; padding: 8px 12px;
+      background: rgba(255,255,255,0.08); color: white; cursor: pointer;
+    }
+    .pill { display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border-radius:999px; background:rgba(125,211,252,.08); color:#d9f4ff; font-size:12px; margin-bottom:8px; }
+    .swatch { width:10px; height:10px; border-radius:999px; display:inline-block; }
+    .title-sm { font-weight:700; line-height:1.35; }
+    .meta { color:#c5d4ea; font-size:13px; margin-top:8px; line-height:1.5; }
+    .detail-title { font-size: 24px; line-height: 1.2; font-weight: 800; margin: 0 0 10px; }
+    .abstract { margin-top: 14px; line-height: 1.6; color: #e7eefc; }
+    .recs { display: grid; gap: 10px; margin-top: 18px; }
+    .rec-item { background: rgba(16,24,40,.84); border:1px solid var(--border); border-radius:18px; padding:14px; cursor:pointer; }
+    a { color:#8bddff; text-decoration:none; } a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <canvas id="atlasBase"></canvas>
+    <canvas id="atlasOverlay"></canvas>
+    <div class="hover-card" id="hoverCard"></div>
+    <div class="hint">FMAP · drag to pan · wheel to zoom · click any point to open paper details.</div>
+    <div class="detail-modal" id="detailModal">
+      <div class="detail-inner">
+        <button class="close-btn" id="closeBtn">✕</button>
+        <div id="details"></div>
+        <div class="recs" id="recs"></div>
+      </div>
+    </div>
+  </div>
+  <script src="data.js"></script>
+  <script>
+    const payload = window.FMAP_DATA || { points: [], colors: {}, counts: {}, stats: { papers: 0, categories: 0 } };
+    const points = payload.points || [];
+    const byId = new Map(points.map(p => [p.id, p]));
+    const baseCanvas = document.getElementById('atlasBase');
+    const overlayCanvas = document.getElementById('atlasOverlay');
+    const baseCtx = baseCanvas.getContext('2d', { alpha: true });
+    const overlayCtx = overlayCanvas.getContext('2d', { alpha: true });
+    const hoverCard = document.getElementById('hoverCard');
+    const detailModal = document.getElementById('detailModal');
+    const details = document.getElementById('details');
+    const recsEl = document.getElementById('recs');
+    const closeBtn = document.getElementById('closeBtn');
+
+    let hovered = null, selected = null;
+    let panX = 0, panY = 0, zoom = 1.35, dragging = false, lastPointer = null;
+    let pointPositions = [], grid = new Map();
+    const GRID_SIZE = 28;
+    const HIT_RADIUS = 16;
+
+    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+    function canvasRect() { return baseCanvas.getBoundingClientRect(); }
+    function canvasWidth() { return baseCanvas.clientWidth; }
+    function canvasHeight() { return baseCanvas.clientHeight; }
+
+    function resize() {
+      const ratio = window.devicePixelRatio || 1;
+      for (const canvas of [baseCanvas, overlayCanvas]) {
+        canvas.width = canvas.clientWidth * ratio;
+        canvas.height = canvas.clientHeight * ratio;
+      }
+      baseCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      overlayCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      recomputePositions();
+      drawBase();
+      drawOverlay();
+    }
+
+    function transformPoint(baseX, baseY) {
+      const cx = canvasWidth() / 2, cy = canvasHeight() / 2;
+      return {
+        x: cx + (baseX - cx) * zoom + panX,
+        y: cy + (baseY - cy) * zoom + panY,
+      };
+    }
+
+    function recomputePositions() {
+      const pad = 12;
+      const w = Math.max(1, canvasWidth() - pad * 2);
+      const h = Math.max(1, canvasHeight() - pad * 2);
+      pointPositions = new Array(points.length);
+      grid = new Map();
+      for (const p of points) {
+        const baseX = pad + p.x * w;
+        const baseY = pad + (1 - p.y) * h;
+        const pos = transformPoint(baseX, baseY);
+        pointPositions[p.id] = pos;
+        const gx = Math.floor(pos.x / GRID_SIZE), gy = Math.floor(pos.y / GRID_SIZE);
+        const key = `${gx},${gy}`;
+        if (!grid.has(key)) grid.set(key, []);
+        grid.get(key).push(p.id);
+      }
+    }
+
+    function drawField(ctx) {
+      ctx.clearRect(0, 0, canvasWidth(), canvasHeight());
+      ctx.fillStyle = '#030611'; ctx.fillRect(0, 0, canvasWidth(), canvasHeight());
+      const grad = ctx.createRadialGradient(canvasWidth() * 0.5, canvasHeight() * 0.45, 40, canvasWidth() * 0.5, canvasHeight() * 0.45, canvasWidth() * 0.7);
+      grad.addColorStop(0, 'rgba(125, 211, 252, 0.05)'); grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, canvasWidth(), canvasHeight());
+    }
+
+    function drawBase() {
+      drawField(baseCtx);
+      for (const p of points) {
+        const pos = pointPositions[p.id];
+        if (!pos) continue;
+        const radius = clamp(0.95 * zoom, 1.05, 2.4);
+        baseCtx.beginPath();
+        baseCtx.fillStyle = p.color;
+        baseCtx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
+        baseCtx.fill();
+      }
+    }
+
+    function drawOverlay() {
+      overlayCtx.clearRect(0, 0, canvasWidth(), canvasHeight());
+      if (hovered) {
+        const pos = pointPositions[hovered.id];
+        if (pos) {
+          overlayCtx.beginPath(); overlayCtx.strokeStyle = 'rgba(125, 211, 252, 0.95)'; overlayCtx.lineWidth = 2.2;
+          overlayCtx.arc(pos.x, pos.y, clamp(8 * zoom, 7, 14), 0, Math.PI * 2); overlayCtx.stroke();
+        }
+      }
+      if (selected) {
+        const pos = pointPositions[selected.id];
+        if (pos) {
+          overlayCtx.beginPath(); overlayCtx.strokeStyle = '#ffffff'; overlayCtx.lineWidth = 2.6;
+          overlayCtx.arc(pos.x, pos.y, clamp(10 * zoom, 9, 16), 0, Math.PI * 2); overlayCtx.stroke();
+        }
+      }
+    }
+
+    function renderHover(p, x, y) {
+      if (!p) { hoverCard.style.display = 'none'; return; }
+      hoverCard.style.display = 'block';
+      hoverCard.style.left = Math.min(x + 18, canvasWidth() - 320) + 'px';
+      hoverCard.style.top = Math.min(y + 18, canvasHeight() - 150) + 'px';
+      hoverCard.innerHTML = `<div class="pill"><span class="swatch" style="background:${p.color}"></span>${p.category}</div><div class="title-sm">${p.title}</div><div class="meta">${p.published ? p.published.slice(0,10) : 'Unknown date'}${p.authors ? ' · ' + p.authors : ''}</div><div class="meta">Click to open paper details.</div>`;
+    }
+
+    function renderRecommendations(p) {
+      recsEl.innerHTML = '';
+      const recs = p?.recommendations || [];
+      if (!recs.length) return;
+      recs.forEach(rec => {
+        const linked = byId.get(rec.id);
+        const item = document.createElement('div');
+        item.className = 'rec-item';
+        item.innerHTML = `<div class="pill">${rec.category}</div><div class="title-sm">${rec.title}</div><div class="meta">${rec.authors || 'Unknown authors'}</div><div class="meta">${rec.published ? rec.published.slice(0,10) : 'Unknown date'} · <strong>${rec.match}% match</strong></div>`;
+        item.addEventListener('click', () => linked && showDetails(linked));
+        recsEl.appendChild(item);
+      });
+    }
+
+    function showDetails(p) {
+      selected = p;
+      details.innerHTML = `<div class="detail-title">${p.title}</div><div class="pill"><span class="swatch" style="background:${p.color}"></span>${p.category}</div><div class="meta">${p.published ? p.published.slice(0,10) : 'Unknown date'}${p.authors ? ' · ' + p.authors : ''}</div><div class="abstract">${p.abstract || 'No abstract available.'}</div><div class="meta" style="margin-top:12px;">${p.url ? `<a href="${p.url}" target="_blank" rel="noreferrer">Open on arXiv</a>` : 'No URL available'}</div>`;
+      renderRecommendations(p);
+      detailModal.style.display = 'block';
+      drawOverlay();
+    }
+
+    function nearestPoint(mx, my) {
+      const gx = Math.floor(mx / GRID_SIZE), gy = Math.floor(my / GRID_SIZE);
+      let best = null, bestDist = Infinity;
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          const bucket = grid.get(`${gx + dx},${gy + dy}`) || [];
+          for (const id of bucket) {
+            const pos = pointPositions[id];
+            const d = Math.hypot(mx - pos.x, my - pos.y);
+            if (d < bestDist) { bestDist = d; best = byId.get(id); }
+          }
+        }
+      }
+      return bestDist < HIT_RADIUS ? best : null;
+    }
+
+    baseCanvas.addEventListener('wheel', (event) => {
+      event.preventDefault();
+      const factor = event.deltaY > 0 ? 0.92 : 1.09;
+      zoom = clamp(zoom * factor, 0.7, 6);
+      recomputePositions(); drawBase(); drawOverlay();
+    }, { passive: false });
+
+    baseCanvas.addEventListener('mousedown', (event) => {
+      dragging = true;
+      lastPointer = { x: event.clientX, y: event.clientY };
+    });
+    window.addEventListener('mouseup', () => { dragging = false; lastPointer = null; });
+    window.addEventListener('mousemove', (event) => {
+      const rect = canvasRect();
+      const inside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+      if (dragging && lastPointer) {
+        panX += event.clientX - lastPointer.x; panY += event.clientY - lastPointer.y;
+        lastPointer = { x: event.clientX, y: event.clientY };
+        recomputePositions(); drawBase(); drawOverlay();
+        return;
+      }
+      if (!inside) {
+        hovered = null; renderHover(null); drawOverlay(); return;
+      }
+      const mx = event.clientX - rect.left, my = event.clientY - rect.top;
+      hovered = nearestPoint(mx, my);
+      renderHover(hovered, mx, my);
+      drawOverlay();
+    });
+
+    baseCanvas.addEventListener('click', (event) => {
+      const rect = canvasRect();
+      const p = nearestPoint(event.clientX - rect.left, event.clientY - rect.top);
+      if (p) showDetails(p);
+    });
+
+    closeBtn.addEventListener('click', () => { detailModal.style.display = 'none'; });
+    detailModal.addEventListener('click', (event) => {
+      if (event.target === detailModal) detailModal.style.display = 'none';
+    });
+
+    window.addEventListener('resize', resize);
+    resize();
+  </script>
+</body>
+</html>
