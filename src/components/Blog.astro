@@ -18,6 +18,12 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
       <div class="mt-14 space-y-16 md:space-y-24">
         {siteConfig.blog.map((post, index) => {
           const reversed = index % 2 === 1;
+          const matchingProject = siteConfig.projects?.find((project) =>
+            project.links?.some((link) => link.url === post.url)
+          );
+          const githubLink = matchingProject?.links?.find((link) =>
+            link.label.toLowerCase().includes("github")
+          );
 
           return (
             <article
@@ -58,6 +64,18 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
                     >
                       <span class="inline-flex h-12 w-12 items-center justify-center border border-white/16 bg-white text-black">■</span>
                       <span>Read more</span>
+                    </a>
+                  )}
+
+                  {githubLink && (
+                    <a
+                      href={githubLink.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-2 text-white/72 transition-colors hover:text-white"
+                    >
+                      <span>GitHub</span>
+                      <span aria-hidden="true">↗</span>
                     </a>
                   )}
                 </div>
