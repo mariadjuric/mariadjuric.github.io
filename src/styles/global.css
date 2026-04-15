@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -23,7 +24,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "IBM Plex Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--text);
   background: transparent;
   overflow-x: hidden;
@@ -63,6 +64,7 @@ footer {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   background: linear-gradient(180deg, rgba(7, 11, 21, 0.62), rgba(7, 11, 21, 0.18));
   backdrop-filter: blur(12px);
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 .site-header.is-hidden {
@@ -120,6 +122,16 @@ img {
   transform: translateY(-6px);
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
   border-color: rgba(255, 255, 255, 0.16);
+}
+
+.section-kicker,
+.page-progress,
+.page-progress__bar,
+button,
+input,
+.pill,
+.meta {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 .section-kicker {
@@ -203,8 +215,8 @@ img {
 }
 
 article code {
-  font-family: "STIX Two Text", "Times New Roman", Georgia, serif;
-  font-size: 0.98em;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.95em;
   background: transparent;
   padding: 0;
   border-radius: 0;
