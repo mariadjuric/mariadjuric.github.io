@@ -69,27 +69,6 @@
       color: white;
       cursor: pointer;
     }
-    .zoom-controls {
-      position: absolute;
-      right: 16px;
-      bottom: 16px;
-      z-index: 25;
-      display: flex;
-      gap: 8px;
-    }
-    .zoom-btn {
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      width: 42px;
-      height: 42px;
-      background: rgba(9,14,27,.74);
-      color: white;
-      font-size: 20px;
-      line-height: 1;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
     .pill { display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border-radius:999px; background:rgba(125,211,252,.08); color:#d9f4ff; font-size:12px; margin-bottom:8px; }
     .swatch { width:10px; height:10px; border-radius:999px; display:inline-block; }
     .title-sm { font-weight:700; line-height:1.35; }
@@ -106,10 +85,6 @@
     <canvas id="atlasBase"></canvas>
     <canvas id="atlasOverlay"></canvas>
     <div class="hover-card" id="hoverCard"></div>
-    <div class="zoom-controls">
-      <button class="zoom-btn" id="zoomOutBtn" aria-label="Zoom out">−</button>
-      <button class="zoom-btn" id="zoomInBtn" aria-label="Zoom in">+</button>
-    </div>
     <div class="detail-modal" id="detailModal">
       <div class="detail-inner">
         <button class="close-btn" id="closeBtn">✕</button>
@@ -132,8 +107,6 @@
     const details = document.getElementById('details');
     const recsEl = document.getElementById('recs');
     const closeBtn = document.getElementById('closeBtn');
-    const zoomInBtn = document.getElementById('zoomInBtn');
-    const zoomOutBtn = document.getElementById('zoomOutBtn');
 
     let hovered = null, selected = null;
     let panX = 0, panY = 0, zoom = 1.18, dragging = false, lastPointer = null;
@@ -302,8 +275,6 @@
       if (p) showDetails(p);
     });
 
-    zoomInBtn.addEventListener('click', () => zoomBy(1.12));
-    zoomOutBtn.addEventListener('click', () => zoomBy(1 / 1.12));
     closeBtn.addEventListener('click', () => { detailModal.style.display = 'none'; });
     detailModal.addEventListener('click', (event) => {
       if (event.target === detailModal) detailModal.style.display = 'none';
