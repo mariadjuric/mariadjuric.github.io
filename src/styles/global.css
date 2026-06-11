@@ -76,12 +76,20 @@ h1, h2, h3, h4 {
 
 .site-header nav {
   margin-top: 0.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(9, 14, 24, 0.58), rgba(9, 14, 24, 0.26));
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.16);
-  backdrop-filter: blur(16px);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.site-header nav a {
+  font-weight: 300;
+}
+
+.site-header nav ul {
+  gap: 2rem;
 }
 
 .site-header.is-hidden {
@@ -108,23 +116,18 @@ img {
 }
 
 .section-shell::before {
-  content: "";
-  position: absolute;
-  inset: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 2rem;
-  pointer-events: none;
+  content: none;
 }
 
 .glass-card {
-  background: linear-gradient(180deg, rgba(15, 22, 38, 0.86), rgba(8, 13, 25, 0.88));
-  border: 1px solid var(--surface-border);
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(18px);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .soft-panel {
-  background: linear-gradient(180deg, rgba(10, 16, 32, 0.7), rgba(8, 12, 24, 0.4));
+  background: transparent;
 }
 
 .hover-lift {
@@ -136,9 +139,9 @@ img {
 }
 
 .hover-lift:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
-  border-color: rgba(255, 255, 255, 0.16);
+  transform: none;
+  box-shadow: none;
+  border-color: transparent;
 }
 
 .section-kicker,
@@ -194,12 +197,12 @@ input,
 }
 
 .blog-shell {
-  background: linear-gradient(180deg, rgba(10, 16, 32, 0.5), rgba(6, 10, 20, 0.24));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 2rem;
-  padding: clamp(1.25rem, 2vw, 2rem);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
-  backdrop-filter: blur(10px);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .blog-page .text-gray-900 { color: #f7f9ff !important; }
@@ -211,12 +214,12 @@ input,
 .blog-page .divide-gray-200 { border-color: rgba(255, 255, 255, 0.09) !important; }
 .blog-page .bg-white,
 .blog-page .bg-gray-50,
-.blog-page .bg-gray-100 { background: linear-gradient(180deg, rgba(15, 22, 38, 0.86), rgba(8, 13, 25, 0.88)) !important; }
-.blog-page .shadow-sm { box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28) !important; }
+.blog-page .bg-gray-100 { background: transparent !important; }
+.blog-page .shadow-sm { box-shadow: none !important; }
 .blog-page .rounded-3xl,
-.blog-page .rounded-2xl { overflow: hidden; }
+.blog-page .rounded-2xl { overflow: visible; border-radius: 0 !important; }
 .blog-page code { color: #f2f5ff; }
-.blog-page iframe { border: 1px solid rgba(255, 255, 255, 0.08); }
+.blog-page iframe { border: 0; border-radius: 0; }
 .blog-page table { color: rgba(232, 238, 255, 0.78); }
 .blog-page thead { background: rgba(255, 255, 255, 0.04) !important; }
 .blog-page td,
@@ -237,6 +240,31 @@ article code {
   background: transparent;
   padding: 0;
   border-radius: 0;
+}
+
+.blog-page h1,
+.blog-page h2,
+.blog-page h3,
+.blog-page h4,
+.blog-page h5,
+.blog-page h6 {
+  font-weight: 500;
+}
+
+.blog-page p,
+.blog-page li,
+.blog-page figcaption,
+.blog-page a,
+.blog-page span {
+  font-weight: 300;
+}
+
+.blog-page figure,
+.blog-page aside,
+.blog-page [class*="rounded-"],
+.blog-page [class*="shadow"],
+.blog-page [class*="border"] {
+  box-shadow: none !important;
 }
 
 article p code,

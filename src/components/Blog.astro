@@ -46,7 +46,7 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
                 )}
                 <div class="mt-6 flex flex-wrap items-center gap-3 text-sm">
                   {post.status?.trim() && (
-                    <span class="inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium" style={`border-color: ${siteConfig.accentColor}88; color: ${siteConfig.accentColor};`}>
+                    <span class="inline-flex items-center px-3 py-1 text-sm font-light" style={`color: ${siteConfig.accentColor};`}>
                       {post.status}
                     </span>
                   )}
@@ -64,7 +64,7 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
                       href={post.url}
                       class="inline-flex items-center gap-3 text-white transition-opacity hover:opacity-80"
                     >
-                      <span class="inline-flex h-12 w-12 items-center justify-center border border-white/16 bg-white text-black">■</span>
+                      <span class="inline-flex h-12 w-12 items-center justify-center text-white/80">■</span>
                       <span>Read more</span>
                     </a>
                   )}
@@ -84,7 +84,7 @@ const hasBlog = siteConfig.blog && siteConfig.blog.length > 0;
               </div>
 
               <div>
-                <div class="relative overflow-hidden rounded-[2rem] border border-white/6 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.10),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(98,127,47,0.10),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] shadow-[0_24px_80px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+                <div class="relative overflow-visible bg-transparent">
                   <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(98,127,47,0.14),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.04),transparent_24%)]"></div>
                   {useFmapEmbed ? (
                     <div class="relative aspect-[1.2/1] w-full">
