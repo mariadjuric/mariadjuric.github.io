@@ -113,15 +113,15 @@ const pageDescription =
         </section>
 
         <section class="mt-16">
-          <h2 class="text-3xl font-bold text-gray-900">A compact implementation sketch</h2>
+          <h2 class="text-3xl font-bold text-gray-900">Implementation sketch</h2>
           <p class="mt-4 text-lg leading-8 text-gray-700">
-            The full pipeline has a fair amount of catalogue plumbing, but the core of the method is compact. I’ve kept the code blocks here in a more demo-like style, focusing on the three ideas that matter most: building the model grid, querying neighbours, and turning neighbours into age probabilities.
+            I begin first by loading the model values from the PARSEC isochrones, and defining the feature scales. Smaller scales place more weight on that dimenion.
           </p>
 
           <div class="demo-code-card mt-8">
             <div class="demo-code-body overflow-x-auto">
 <pre><code><span class="tok-keyword">from</span> <span class="tok-module">sklearn.neighbors</span> <span class="tok-keyword">import</span> <span class="tok-class">KDTree</span>
-<span class="tok-keyword">import</span> <span class="tok-module">numpy</span> <span class="tok-keyword">as</span> np
+<span class="tok-keyword">import</span> <span class="tok-module">numpy</span> <span class="tok-keyword">as</span> <span class="tok-np">np</span>
 
 X_model <span class="tok-operator">=</span> <span class="tok-np">np</span>.vstack([
     color,

@@ -226,12 +226,12 @@ const pageDescription =
             <span class="font-serif text-lg">J<sub>z</sub> = (1 / 2&pi;) &oint; v<sub>z</sub> dz, &nbsp;&nbsp; &Omega;<sub>z</sub>(J) = 2&pi; (&oint; dz / v<sub>z</sub>)<sup>-1</sup></span>
           </div>
           <p class="mt-6 text-lg leading-8 text-gray-700">
-            The agreement is good: the absolute residuals stay within about 0.005, which is more than enough to show that the model is learning a sensible action-frequency relationship rather than just memorising trajectories.
+            The agreement is good: the absolute residuals are consistently within 0.001, which is more than enough to show that the model is learning a sensible action-frequency relationship rather than just memorising trajectories.
           </p>
           <figure class="mt-8 overflow-visible bg-transparent">
             <img src="/images/blog/aakoopman/omega_J_comparison_iso.png" alt="Comparison of learned and numerically integrated actions and frequencies in the isothermal slab" class="w-full" />
             <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
-              <strong>Isothermal slab validation.</strong> Learned actions and frequencies agree well with numerically integrated reference values, with absolute residuals within roughly 0.005.
+              <strong>Isothermal slab validation.</strong> Learned actions and frequencies agree well with numerically integrated reference values, with absolute residuals within roughly 0.001.
             </figcaption>
           </figure>
         </section>
@@ -258,7 +258,7 @@ const pageDescription =
             </figure>
           </div>
           <p>
-              In the harmonic oscillator, the learned inverse map can also be used to generate an orbit directly from an initial action-angle point. The decoded trajectory stays close to the analytic solution, with residuals at the <code>10<sup>-3</sup></code> level and no obvious secular drift over multiple periods.
+              In the harmonic oscillator, the learned inverse map can also be used to generate an orbit directly from an initial action-angle point. In the animation below, over a few periods residuals remain within roughly 0.005-0.01, although there is a secular rise in errors. In light of the above figure, the encoder itself does not result in secular drift, so this is entirely attributed to by the discrepancy in the learned <code>&Omega;</code>. Despite absolute frequency residuals of 0.0001 order, this accumulates over several periods, but nonetheless, the learned inverse map and latent rotation produce stable trajectories over several periods. Caution should be taken for long-time evolution under a learned frequency, however. 
             </p>
           <figure class="mt-10 overflow-visible bg-transparent">
             <img src="/images/blog/aakoopman/anim_inverse_rollout_ho.gif" alt="Animated harmonic oscillator rollout generated from the learned inverse map" class="w-full" />
