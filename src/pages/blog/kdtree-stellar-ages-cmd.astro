@@ -29,7 +29,7 @@ const pageDescription =
             Estimating stellar ages from the CMD with KD trees
           </h1>
           <p class="mt-6 max-w-4xl text-lg leading-8 text-gray-700">
-            Thisblog post is about how I assign approximate ages to <em>Gaia</em> subgiant stars by matching them to PARSEC isochrones in a colour-magnitude diagram, while also using metallicity and atmospheric parameters as secondary constraints. The goal is not precision age dating for individual stars, but a robust way to carve out clean, disjoint age populations that can be compared against simulations.
+            This blog post is about how I assign approximate ages to <em>Gaia</em> subgiant stars by matching them to PARSEC isochrones in a colour-magnitude diagram, while also using metallicity and atmospheric parameters as secondary constraints. The goal is not precision age dating for individual stars, but a robust way to carve out clean, disjoint age populations that can be compared against simulations.
           </p>
           <div class="mt-6 flex flex-wrap gap-3 text-sm text-gray-600">
             <span class="px-3 py-1.5">Gaia DR3</span>
@@ -93,7 +93,7 @@ const pageDescription =
           <h2 class="text-3xl font-bold text-gray-900">The role of metallicity</h2>
           <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
             <p>
-              The extra dimensions matter because mono-abundance isochrones in the subgiant region are well separated, but isochrones of different metallicity can overlap in the CMD. If I only matched in colour and magnitude, stars with different chemistry could be pulled toward the wrong age sequence.
+              The extra dimensions matter because mono-abundance isochrones in the subgiant region are well separated, but isochrones of different metallicity can overlap in the CMD as shown in the Figure below. If I only matched in colour and magnitude, stars with different chemistry could be pulled toward the wrong age sequence.
             </p>
             <p>
               I therefore use calibrated <em>Gaia</em> DR3 GSP-Phot metallicities where available, with the remaining stars falling back to the raw catalogue values. Observed metallicities are clipped to the model-grid range so the method never extrapolates beyond the available isochrones.
@@ -137,11 +137,11 @@ const pageDescription =
 sig <span class="tok-operator">=</span> np.array([<span class="tok-number">0.08</span>, <span class="tok-number">0.12</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.2</span>])
 
 X_model <span class="tok-operator">=</span> np.vstack([
-    color_iso[m_sgb],
-    MG_iso[m_sgb],
-    mh_iso[m_sgb],
-    logg_iso[m_sgb],
-    logTeff_iso[m_sgb],
+    color,
+    MG,
+    mh,
+    logg,
+    logTeff,
 ]).T
 
 tree <span class="tok-operator">=</span> <span class="tok-class">KDTree</span>(X_model <span class="tok-operator">/</span> sig, leaf_size<span class="tok-operator">=</span><span class="tok-number">200</span>)</code></pre>
@@ -154,7 +154,8 @@ tree <span class="tok-operator">=</span> <span class="tok-class">KDTree</span>(X
 
           <div class="demo-code-card mt-8">
             <div class="demo-code-body overflow-x-auto">
-<pre><code>X_star <span class="tok-operator">=</span> np.vstack([C0, MG0, mh_u, lg0, Tf0]).T
+<pre><code><span class="tok-comment"># Observed values</span>
+X_star <span class="tok-operator">=</span> np.vstack([C0, MG0, mh_u, lg0, Tf0]).T
 X_star[good, <span class="tok-number">2</span>] <span class="tok-operator">=</span> np.clip(X_star[good, <span class="tok-number">2</span>], mh_min, mh_max)
 
 dist, ind <span class="tok-operator">=</span> tree.query(X_star[good] <span class="tok-operator">/</span> sig, k<span class="tok-operator">=</span><span class="tok-number">128</span>)
@@ -169,7 +170,10 @@ w <span class="tok-operator">=</span> np.exp(<span class="tok-operator">-</span>
 
           <div class="demo-code-card mt-8">
             <div class="demo-code-body overflow-x-auto">
-<pre><code>alpha <span class="tok-operator">=</span> <span class="tok-number">0.5</span>
+<pre><code><span class="tok-comment"># inverse-count weights =&gt; each (logAge, MH) isochrone has equal total weight</span>
+w_model <span class="tok-operator">=</span> np.array([<span class="tok-number">1.0</span> <span class="tok-operator">/</span> count_map[k] <span class="tok-keyword">for</span> k <span class="tok-keyword">in</span> keys], dtype<span class="tok-operator">=</span><span class="tok-class">float</span>)
+
+alpha <span class="tok-operator">=</span> <span class="tok-number">0.5</span>
 w <span class="tok-operator">*=</span> (w_model[ind] <span class="tok-operator">**</span> alpha)
 w <span class="tok-operator">/=</span> w.sum(axis<span class="tok-operator">=</span><span class="tok-number">1</span>)[:, <span class="tok-constant">None</span>]
 
@@ -181,13 +185,10 @@ w <span class="tok-operator">/=</span> w.sum(axis<span class="tok-operator">=</s
         </section>
 
         <section class="mt-16">
-          <h2 class="text-3xl font-bold text-gray-900">What this gives me in practice</h2>
+          <h2 class="text-3xl font-bold text-gray-900">Results</h2>
           <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
             <p>
               The end result is not a catalogue of precision stellar ages. It is a statistically useful age-labelled subgiant sample with broad but cleanly separated populations.
-            </p>
-            <p>
-              I then assign stars to 4, 5, 6, 7, 8, and 9 Gyr selections using a plus-or-minus 300 Myr threshold around each target age. That leaves 372,398 stars between 4 and 9 Gyr in the sample version described here, with an approximately uniform distribution in age.
             </p>
             <figure class="overflow-visible bg-transparent">
               <img src="/images/blog/kdtree-stars/sgb_age_map_expected_age.png" alt="Subgiant-branch stars in the CMD coloured by expected age from KD-tree isochrone matching" class="w-full" />
@@ -195,9 +196,6 @@ w <span class="tok-operator">/=</span> w.sum(axis<span class="tok-operator">=</s
                 <strong>Expected age map.</strong> After local interpolation in the scaled feature space, the CMD shows a smooth age ordering across the subgiant selection region.
               </figcaption>
             </figure>
-            <p>
-              For comparing age-stratified observational structure to simulation snapshots, that is exactly the tradeoff I want.
-            </p>
           </div>
         </section>
 

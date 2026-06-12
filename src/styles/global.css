@@ -310,6 +310,7 @@ article h6 code {
 .tok-number { color: #b5cea8; }
 .tok-operator { color: #d4d4d4; }
 .tok-constant { color: #569cd6; }
+.tok-comment { color: #7f8ea3; }
 
 @media (max-width: 900px) {
   .page-progress {
