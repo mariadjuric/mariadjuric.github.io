@@ -2,9 +2,9 @@
 import "../../styles/global.css";
 import { siteConfig } from "../../config";
 
-const pageTitle = "Learning action-angle coordinates with a Koopman-inspired symplectic autoencoder";
+const pageTitle = "Learning action-angle coordinates with a Koopman symplectic autoencoder";
 const pageDescription =
-  "A short research note on learning action-angle coordinates and orbital frequencies with a Koopman-inspired symplectic neural network, with 1D tests on the harmonic oscillator and isothermal slab.";
+  "A short research note on learning action-angle coordinates and orbital frequencies with a Koopman symplectic neural network, with 1D tests on the harmonic oscillator and isothermal slab.";
 ---
 
 <html lang="en">
@@ -57,13 +57,10 @@ const pageDescription =
             Blog
           </p>
           <h1 class="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
-            Learning action-angle coordinates with a Koopman-inspired symplectic autoencoder
+            Learning action-angle coordinates with a Koopman symplectic autoencoder
           </h1>
           <p class="mt-6 max-w-4xl text-lg leading-8 text-gray-700">
-            I have been working on a neural-network approach to learning action-angle coordinates directly from orbital trajectories, while also recovering orbital frequencies and a Hamiltonian-like energy map. The longer-term goal is to make action-angle calculations more flexible in realistic Galactic potentials, but for now I only want to show the one-dimensional validation tests publicly.
-          </p>
-          <p class="mt-4 max-w-4xl text-lg leading-8 text-gray-700">
-            So this post is intentionally narrow: a brief bit of context, the core idea, and the 1D results in the harmonic oscillator and isothermal slab. The broader axisymmetric results are being held back for now because that work is intended for publication.
+            I have been working on a neural-network approach to learning action-angle coordinates directly from orbital trajectories, while also recovering orbital frequencies and a Hamiltonian energy map. The longer-term goal is to make action-angle calculations more flexible in realistic Galactic potentials, but for now I only want to show the one-dimensional validation tests publicly.
           </p>
           <div class="mt-6 flex flex-wrap gap-3 text-sm text-gray-600">
             <span class="px-3 py-1.5">PyTorch</span>
@@ -99,7 +96,7 @@ const pageDescription =
               The model is a symplectic autoencoder. It learns an invertible map from phase-space coordinates into a latent space where each degree of freedom is represented by a two-dimensional plane. In that latent space, the dynamics are constrained to look like simple rotations, so the radius of each latent pair behaves like an action and the phase behaves like an angle.
             </p>
             <p class="mt-4 text-lg leading-8 text-gray-700">
-              A separate small neural network then learns the frequency map and another learns a scalar energy-like function, with the model encouraged to satisfy the Hamiltonian relation dH/dJ ~ Omega(J). The point is not just to reconstruct trajectories, but to make the latent variables physically interpretable.
+              A separate small neural network then learns the frequency map and another learns a scalar energy-like function, with the model encouraged to satisfy the Hamiltonian relation <code> dH/dJ = &Omega;(J)</code>. The point is not just to reconstruct trajectories, but to make the latent variables physically interpretable.
             </p>
           </div>
           <aside class="p-6">
@@ -149,16 +146,13 @@ const pageDescription =
               I am skipping most of the training details here, but the architecture matters. The encoder is built from symplectic coupling layers, so the learned map is invertible and structure-preserving by construction. The decoder is simply the inverse map. That helps separate two different questions: the quality of the latent representation and the quality of time evolution in this latent space.
             </p>
             <p>
-              In one dimension, the model is relatively small: an 8-layer symplectic encoder/decoder, plus compact MLPs for the frequency map and the Hamiltonian regressor. The two validation problems are a harmonic oscillator, where the action-angle structure is analytically known, and an isothermal slab, where the frequency varies non-trivially with action.
+              In one dimension, the model is relatively small: an 8-layer symplectic encoder/decoder, plus compact MLPs for the frequency map and the Hamiltonian regressor. I perform tests in two potentials: the harmonic oscillator, where the action-angle structure is analytically known, and an isothermal slab, where the frequency varies with action.
             </p>
           </div>
         </section>
 
         <section class="mt-16">
           <h2 class="text-3xl font-bold text-gray-900">1D tests</h2>
-          <p class="mt-4 text-lg leading-8 text-gray-700">
-            The first set of checks is deliberately simple. If the model cannot recover stable actions, angles, and frequencies in one dimension, there is no point pretending it will behave sensibly in more realistic Galactic potentials.
-          </p>
           <div class="mt-8 grid gap-6 md:grid-cols-2">
             <div class="p-6">
               <h3 class="text-xl font-medium text-gray-900">Harmonic oscillator</h3>
@@ -248,9 +242,6 @@ const pageDescription =
             <p>
               Another useful check is to separate reconstruction quality from dynamical prediction. If a state is encoded and immediately decoded, the reconstruction is essentially exact up to numerical precision. That confirms that prediction errors are driven by the learned latent evolution and frequency map, not by a failure of invertibility in the symplectic encoder-decoder pair.
             </p>
-            <p>
-              In the harmonic oscillator, the learned inverse map can also be used to generate an orbit directly from an initial action-angle point. The decoded trajectory stays close to the analytic solution, with residuals at the <code>10<sup>-3</sup></code> level and no obvious secular drift over multiple periods.
-            </p>
           </div>
           <div class="mt-8 grid gap-10 lg:grid-cols-2">
             <figure class="overflow-visible bg-transparent">
@@ -266,6 +257,9 @@ const pageDescription =
               </figcaption>
             </figure>
           </div>
+          <p>
+              In the harmonic oscillator, the learned inverse map can also be used to generate an orbit directly from an initial action-angle point. The decoded trajectory stays close to the analytic solution, with residuals at the <code>10<sup>-3</sup></code> level and no obvious secular drift over multiple periods.
+            </p>
           <figure class="mt-10 overflow-visible bg-transparent">
             <img src="/images/blog/aakoopman/anim_inverse_rollout_ho.gif" alt="Animated harmonic oscillator rollout generated from the learned inverse map" class="w-full" />
             <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
