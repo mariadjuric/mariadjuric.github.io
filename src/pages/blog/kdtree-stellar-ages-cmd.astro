@@ -137,16 +137,12 @@ const pageDescription =
           </p>
 
           <div class="demo-code-card mt-8">
-            <div class="demo-code-header">
-              <span class="demo-code-pill">Step 1</span>
-              <span class="demo-code-title">Build the scaled isochrone grid</span>
-            </div>
             <div class="demo-code-body overflow-x-auto">
-<pre><code>from sklearn.neighbors import KDTree
+<pre><code><span class="tok-keyword">from</span> <span class="tok-module">sklearn.neighbors</span> <span class="tok-keyword">import</span> <span class="tok-class">KDTree</span>
 
-sig = np.array([0.08, 0.12, 0.4, 0.4, 0.2])
+sig <span class="tok-operator">=</span> np.array([<span class="tok-number">0.08</span>, <span class="tok-number">0.12</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.2</span>])
 
-X_model = np.vstack([
+X_model <span class="tok-operator">=</span> np.vstack([
     color_iso[m_sgb],
     MG_iso[m_sgb],
     mh_iso[m_sgb],
@@ -154,7 +150,7 @@ X_model = np.vstack([
     logTeff_iso[m_sgb],
 ]).T
 
-tree = KDTree(X_model / sig, leaf_size=200)</code></pre>
+tree <span class="tok-operator">=</span> <span class="tok-class">KDTree</span>(X_model <span class="tok-operator">/</span> sig, leaf_size<span class="tok-operator">=</span><span class="tok-number">200</span>)</code></pre>
             </div>
           </div>
 
@@ -163,17 +159,13 @@ tree = KDTree(X_model / sig, leaf_size=200)</code></pre>
           </p>
 
           <div class="demo-code-card mt-8">
-            <div class="demo-code-header">
-              <span class="demo-code-pill">Step 2</span>
-              <span class="demo-code-title">Query local neighbours in the same feature space</span>
-            </div>
             <div class="demo-code-body overflow-x-auto">
-<pre><code>X_star = np.vstack([C0, MG0, mh_u, lg0, Tf0]).T
-X_star[good, 2] = np.clip(X_star[good, 2], mh_min, mh_max)
+<pre><code>X_star <span class="tok-operator">=</span> np.vstack([C0, MG0, mh_u, lg0, Tf0]).T
+X_star[good, <span class="tok-number">2</span>] <span class="tok-operator">=</span> np.clip(X_star[good, <span class="tok-number">2</span>], mh_min, mh_max)
 
-dist, ind = tree.query(X_star[good] / sig, k=128)
-mask = dist &lt; 2.0
-w = np.exp(-0.5 * dist**2) * mask</code></pre>
+dist, ind <span class="tok-operator">=</span> tree.query(X_star[good] <span class="tok-operator">/</span> sig, k<span class="tok-operator">=</span><span class="tok-number">128</span>)
+mask <span class="tok-operator">=</span> dist <span class="tok-operator">&lt;</span> <span class="tok-number">2.0</span>
+w <span class="tok-operator">=</span> np.exp(<span class="tok-operator">-</span><span class="tok-number">0.5</span> <span class="tok-operator">*</span> dist<span class="tok-operator">**</span><span class="tok-number">2</span>) <span class="tok-operator">*</span> mask</code></pre>
             </div>
           </div>
 
@@ -182,18 +174,14 @@ w = np.exp(-0.5 * dist**2) * mask</code></pre>
           </p>
 
           <div class="demo-code-card mt-8">
-            <div class="demo-code-header">
-              <span class="demo-code-pill">Step 3</span>
-              <span class="demo-code-title">Correct density bias and accumulate age-bin probabilities</span>
-            </div>
             <div class="demo-code-body overflow-x-auto">
-<pre><code>alpha = 0.5
-w *= (w_model[ind] ** alpha)
-w /= w.sum(axis=1)[:, None]
+<pre><code>alpha <span class="tok-operator">=</span> <span class="tok-number">0.5</span>
+w <span class="tok-operator">*=</span> (w_model[ind] <span class="tok-operator">**</span> alpha)
+w <span class="tok-operator">/=</span> w.sum(axis<span class="tok-operator">=</span><span class="tok-number">1</span>)[:, <span class="tok-constant">None</span>]
 
-for i in range(len(bins) - 1):
-    sel = (logAge_nn &gt;= bins[i]) &amp; (logAge_nn &lt; bins[i+1])
-    P[:, i] = (w * sel).sum(axis=1) / w.sum(axis=1)</code></pre>
+<span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> range(len(bins) <span class="tok-operator">-</span> <span class="tok-number">1</span>):
+    sel <span class="tok-operator">=</span> (logAge_nn <span class="tok-operator">&gt;=</span> bins[i]) <span class="tok-operator">&amp;</span> (logAge_nn <span class="tok-operator">&lt;</span> bins[i<span class="tok-operator">+</span><span class="tok-number">1</span>])
+    P[:, i] <span class="tok-operator">=</span> (w <span class="tok-operator">*</span> sel).sum(axis<span class="tok-operator">=</span><span class="tok-number">1</span>) <span class="tok-operator">/</span> w.sum(axis<span class="tok-operator">=</span><span class="tok-number">1</span>)</code></pre>
             </div>
           </div>
         </section>
