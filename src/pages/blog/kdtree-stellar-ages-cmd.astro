@@ -134,8 +134,6 @@ const pageDescription =
             <div class="demo-code-body overflow-x-auto">
 <pre><code><span class="tok-keyword">from</span> <span class="tok-module">sklearn.neighbors</span> <span class="tok-keyword">import</span> <span class="tok-class">KDTree</span>
 
-sig <span class="tok-operator">=</span> np.array([<span class="tok-number">0.08</span>, <span class="tok-number">0.12</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.2</span>])
-
 X_model <span class="tok-operator">=</span> np.vstack([
     color,
     MG,
@@ -143,6 +141,19 @@ X_model <span class="tok-operator">=</span> np.vstack([
     logg,
     logTeff,
 ]).T
+y_model <span class="tok-operator">=</span> logAge
+
+<span class="tok-comment"># y_model is logAge for each model point</span>
+<span class="tok-comment"># X_model[:,2] is MH for each model point (stacked as [color, MG, MH, logg, Teff])</span>
+logA_key <span class="tok-operator">=</span> np.round(y_model, <span class="tok-number">3</span>) <span class="tok-comment"># logAge grid rounding</span>
+mh_key <span class="tok-operator">=</span> np.round(X_model[:, <span class="tok-number">2</span>], <span class="tok-number">3</span>) <span class="tok-comment"># MH grid rounding</span>
+
+keys <span class="tok-operator">=</span> logA_key.astype(str) <span class="tok-operator">+</span> <span class="tok-string">"_"</span> <span class="tok-operator">+</span> mh_key.astype(str)
+uniq, counts <span class="tok-operator">=</span> np.unique(keys, return_counts<span class="tok-operator">=</span><span class="tok-constant">True</span>)
+count_map <span class="tok-operator">=</span> dict(zip(uniq, counts))
+
+<span class="tok-comment"># feature scales - normalise each feature by its typical scale</span>
+sig <span class="tok-operator">=</span> np.array([<span class="tok-number">0.08</span>, <span class="tok-number">0.12</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.2</span>]) <span class="tok-comment"># color, MG, [M/H], logg, logTeff</span>
 
 tree <span class="tok-operator">=</span> <span class="tok-class">KDTree</span>(X_model <span class="tok-operator">/</span> sig, leaf_size<span class="tok-operator">=</span><span class="tok-number">200</span>)</code></pre>
             </div>
