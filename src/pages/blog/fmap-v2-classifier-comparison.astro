@@ -87,7 +87,7 @@ const classDeltas = [
             <code>title + abstract</code>.
           </p>
           <div class="mt-8 grid gap-6 md:grid-cols-2">
-            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+            <div class="p-6">
               <h3 class="text-xl font-semibold text-gray-900">Class counts</h3>
               <ul class="mt-4 space-y-2 text-gray-700">
                 <li><strong>astro-ph.GA</strong>: 1268</li>
@@ -98,7 +98,7 @@ const classDeltas = [
                 <li><strong>astro-ph.IM</strong>: 498</li>
               </ul>
             </div>
-            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+            <div class="p-6">
               <h3 class="text-xl font-semibold text-gray-900">Current corpus snapshot</h3>
               <ul class="mt-4 space-y-2 text-gray-700">
                 <li><strong>Source</strong>: arXiv export API via FMAP ingestion</li>
@@ -114,14 +114,14 @@ const classDeltas = [
         <section class="mt-16">
           <h2 class="text-3xl font-bold text-gray-900">What changed from v1 to v2?</h2>
           <div class="mt-8 grid gap-6 md:grid-cols-2">
-            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div class="p-6">
               <h3 class="text-2xl font-semibold text-gray-900">v1</h3>
               <p class="mt-3 leading-7 text-gray-700">
                 The original classifier uses TF-IDF with unigram and bigram features, then a LinearSVC. It is fast, simple, interpretable,
                 and still a very good baseline for scientific text classification.
               </p>
             </div>
-            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div class="p-6">
               <h3 class="text-2xl font-semibold text-gray-900">v2</h3>
               <p class="mt-3 leading-7 text-gray-700">
                 The new classifier fine-tunes <strong>allenai/scibert_scivocab_uncased</strong> for six-way astro-ph classification using PyTorch and Hugging Face.
@@ -141,7 +141,7 @@ const classDeltas = [
             The cleanest summary is simple: the transformer wins, but not by some silly margin. That is actually what makes the result believable.
             The baseline was already doing real work, and v2 improves on it rather than replacing a toy.
           </p>
-          <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+          <div class="mt-8 overflow-visible bg-transparent">
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
                 <thead class="bg-gray-50 text-gray-700">
@@ -170,7 +170,7 @@ const classDeltas = [
             </div>
           </div>
 
-          <figure class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+          <figure class="mt-8 overflow-visible bg-transparent">
             <img src="/images/blog/fmap-v1-v2-headline-metrics.png" alt="FMAP v1 versus v2 headline metric comparison" class="w-full" />
             <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
               <strong>Headline metrics.</strong> On this astro-ph evaluation setup, v2 improves both accuracy and macro F1 over the v1 TF-IDF + LinearSVC baseline.
@@ -178,7 +178,7 @@ const classDeltas = [
           </figure>
 
           <div class="mt-8 grid gap-6 md:grid-cols-2">
-            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+            <div class="p-6">
               <h3 class="text-xl font-semibold text-gray-900">Overall delta</h3>
               <ul class="mt-4 space-y-3 text-gray-700">
                 <li><strong>Accuracy:</strong> +0.0128</li>
@@ -187,7 +187,7 @@ const classDeltas = [
                 <li><strong>Other strong gains:</strong> astro-ph.CO, astro-ph.GA</li>
               </ul>
             </div>
-            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+            <div class="p-6">
               <h3 class="text-xl font-semibold text-gray-900">Read it plainly</h3>
               <p class="mt-4 leading-7 text-gray-700">
                 v2 is not an absurd leap over the baseline, which is actually a good sign. The v1 model was already decent. But the transformer does improve the aggregate metrics,
@@ -203,14 +203,14 @@ const classDeltas = [
             Looking only at the headline metrics hides the more interesting story. The useful question is where the transformer helps, and where the classical baseline remains competitive.
           </p>
 
-          <figure class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+          <figure class="mt-8 overflow-visible bg-transparent">
             <img src="/images/blog/fmap-v1-v2-per-class-f1.png" alt="FMAP per-class F1 comparison between v1 and v2" class="w-full" />
             <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
               <strong>Per-class F1 comparison.</strong> The most meaningful improvements are in astro-ph.IM, astro-ph.CO, and astro-ph.GA, while astro-ph.HE dips slightly and astro-ph.SR is essentially flat.
             </figcaption>
           </figure>
 
-          <div class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+          <div class="mt-8 overflow-visible bg-transparent">
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
                 <thead class="bg-gray-50 text-gray-700">
@@ -256,7 +256,7 @@ const classDeltas = [
             more concentrated, and more astrophysically sensible.
           </p>
 
-          <figure class="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+          <figure class="mt-8 overflow-visible bg-transparent">
             <img src="/images/blog/fmap-v1-v2-confusion-side-by-side.png" alt="FMAP v1 and v2 confusion matrices shown side by side" class="w-full" />
             <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
               <strong>Side-by-side confusion matrices.</strong> This corrected figure compares the actual v1 confusion matrix against the actual saved v2 confusion matrix. The transformer improves parts of the diagonal and shifts a few of the class confusions rather than producing a dramatic wholesale change.
@@ -272,19 +272,19 @@ const classDeltas = [
           </p>
 
           <div class="mt-8 grid gap-6 lg:grid-cols-2">
-            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div class="p-6">
               <h3 class="text-2xl font-semibold text-gray-900">v1: linear classification in sparse feature space</h3>
               <p class="mt-4 leading-7 text-gray-700">
                 In the baseline model, each paper is represented by a TF-IDF vector <code>x<sub>d</sub> &in; &Ropf;<sup>V</sup></code>, where <code>V</code> is the vocabulary size after feature selection.
                 The classifier then learns a linear score for each class:
               </p>
-              <div class="mt-4 overflow-x-auto rounded-2xl bg-gray-50 px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+              <div class="mt-4 overflow-x-auto px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
                 <span class="font-serif italic">s</span><sub>k</sub>(<span class="font-serif italic">d</span>) = <span class="font-serif italic">w</span><sub>k</sub><sup>T</sup><span class="font-serif italic">x</span><sub>d</sub> + <span class="font-serif italic">b</span><sub>k</sub>
               </div>
               <p class="mt-4 leading-7 text-gray-700">
                 and predicts
               </p>
-              <div class="mt-4 overflow-x-auto rounded-2xl bg-gray-50 px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+              <div class="mt-4 overflow-x-auto px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
                 <span class="font-serif italic">ŷ</span>(<span class="font-serif italic">d</span>) = arg&nbsp;max<sub>k</sub> <span class="font-serif italic">s</span><sub>k</sub>(<span class="font-serif italic">d</span>)
               </div>
               <p class="mt-4 leading-7 text-gray-700">
@@ -292,19 +292,19 @@ const classDeltas = [
               </p>
             </div>
 
-            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div class="p-6">
               <h3 class="text-2xl font-semibold text-gray-900">v2: contextual representation + classification head</h3>
               <p class="mt-4 leading-7 text-gray-700">
                 In v2, the title and abstract are tokenized and passed through SciBERT, producing a contextual representation <code>h_d</code> for the document.
                 The classification head then produces logits
               </p>
-              <div class="mt-4 overflow-x-auto rounded-2xl bg-gray-50 px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+              <div class="mt-4 overflow-x-auto px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
                 <span class="font-serif italic">z</span><sub>k</sub>(<span class="font-serif italic">d</span>) = <span class="font-serif italic">W</span><sub>k</sub><sup>T</sup><span class="font-serif italic">h</span><sub>d</sub> + <span class="font-serif italic">b</span><sub>k</sub>
               </div>
               <p class="mt-4 leading-7 text-gray-700">
                 and the class probabilities are given by softmax:
               </p>
-              <div class="mt-4 overflow-x-auto rounded-2xl bg-gray-50 px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+              <div class="mt-4 overflow-x-auto px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
                 <span class="font-serif italic">p</span>(<span class="font-serif italic">y</span> = <span class="font-serif italic">k</span> | <span class="font-serif italic">d</span>) = exp(<span class="font-serif italic">z</span><sub>k</sub>(<span class="font-serif italic">d</span>)) / &Sigma;<sub>j</sub> exp(<span class="font-serif italic">z</span><sub>j</sub>(<span class="font-serif italic">d</span>))
               </div>
               <p class="mt-4 leading-7 text-gray-700">
@@ -314,28 +314,28 @@ const classDeltas = [
           </div>
 
           <div class="mt-8 grid gap-6 lg:grid-cols-2">
-            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+            <div class="p-6">
               <h3 class="text-xl font-semibold text-gray-900">Embedding similarity</h3>
               <p class="mt-4 leading-7 text-gray-700">
                 For retrieval and mapping, FMAP uses dense sentence embeddings <code>e_d</code>. Similarity is computed with cosine similarity,
                 which reduces to a dot product when the embeddings are normalized:
               </p>
-              <div class="mt-4 overflow-x-auto rounded-2xl bg-white px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+              <div class="mt-4 overflow-x-auto px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
                 sim(<span class="font-serif italic">d</span><sub>i</sub>, <span class="font-serif italic">d</span><sub>j</sub>) = (<span class="font-serif italic">e</span><sub>i</sub><sup>T</sup><span class="font-serif italic">e</span><sub>j</sub>) / (&#8741;<span class="font-serif italic">e</span><sub>i</sub>&#8741; &#8741;<span class="font-serif italic">e</span><sub>j</sub>&#8741;)
               </div>
             </div>
-            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+            <div class="p-6">
               <h3 class="text-xl font-semibold text-gray-900">Why macro F1 matters</h3>
               <p class="mt-4 leading-7 text-gray-700">
                 Because the six classes are not perfectly balanced, macro F1 is a better summary than raw accuracy alone. For each class,
               </p>
-              <div class="mt-4 overflow-x-auto rounded-2xl bg-white px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+              <div class="mt-4 overflow-x-auto px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
                 <span class="font-serif italic">F1</span><sub>k</sub> = 2 · <span class="font-serif italic">precision</span><sub>k</sub> · <span class="font-serif italic">recall</span><sub>k</sub> / (<span class="font-serif italic">precision</span><sub>k</sub> + <span class="font-serif italic">recall</span><sub>k</sub>)
               </div>
               <p class="mt-4 leading-7 text-gray-700">
                 and the reported macro F1 is the unweighted mean over classes:
               </p>
-              <div class="mt-4 overflow-x-auto rounded-2xl bg-white px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
+              <div class="mt-4 overflow-x-auto px-6 py-5 text-center text-base text-gray-900 sm:text-lg">
                 <span class="font-serif italic">MacroF1</span> = (1 / <span class="font-serif italic">K</span>) &middot; &Sigma;<sub>k</sub> <span class="font-serif italic">F1</span><sub>k</sub>
               </div>
             </div>
@@ -359,7 +359,7 @@ const classDeltas = [
               better calibration, and potential links between classification and retrieval objectives later on.
             </p>
           </div>
-          <aside class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+          <aside class="p-6">
             <h3 class="text-xl font-semibold text-gray-900">Tradeoffs</h3>
             <ul class="mt-4 space-y-3 text-gray-700">
               <li><strong>v1 wins on speed.</strong></li>
@@ -373,7 +373,7 @@ const classDeltas = [
 
         <section class="mt-16">
           <h2 class="text-3xl font-bold text-gray-900">References</h2>
-          <div class="mt-8 space-y-5 rounded-3xl border border-gray-200 bg-white p-8 shadow-sm text-gray-700">
+          <div class="mt-8 space-y-5 p-8 text-gray-700">
             <p>
               <strong>Vaswani et al. (2017).</strong> <em>Attention Is All You Need.</em><br />
               <a href="https://arxiv.org/abs/1706.03762" class="underline">https://arxiv.org/abs/1706.03762</a>
