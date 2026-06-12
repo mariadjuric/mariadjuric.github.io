@@ -1,6 +1,9 @@
 MIT License
 
 Copyright (c) 2025 Ryan Fitzgerald
+Copyright (c) 2026 Maria Djuric
+
+This project includes work originally derived from a template or codebase by Ryan Fitzgerald, with subsequent modifications by Maria Djuric.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
