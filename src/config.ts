@@ -181,6 +181,16 @@ export const siteConfig = {
       previewEyebrow: "Deep learning in dynamical systems · Hamiltonian dynamics"
     },
     {
+      title: "Estimating stellar ages from the CMD with KD-trees",
+      status: "New",
+      description:
+        "A short research note on assigning approximate ages to Gaia subgiant stars by matching them to PARSEC isochrones in a scaled five-dimensional space using a KDTree.",
+      url: "/blog/kdtree-stellar-ages-cmd",
+      previewImage: "/images/blog/kdtree-stars/sgb_age_map_expected_age.png",
+      previewAlt: "Subgiant-branch stars in the CMD coloured by expected age from KD-tree isochrone matching",
+      previewEyebrow: "Gaia DR3 · Isochrones · KDTree"
+    },
+    {
       title: "FMAP v2: comparing a SciBERT classifier against the v1 TF-IDF baseline on astro-ph arXiv data",
       status: "New",
       description:
