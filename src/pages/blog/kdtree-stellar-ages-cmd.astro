@@ -74,18 +74,6 @@ const pageDescription =
               In practice I query the 128 nearest model points, keep only neighbours within a scaled distance threshold, and convert those local matches into a smoothed age estimate rather than assigning every star to a single best-fitting isochrone point.
             </p>
           </div>
-          <aside class="p-6">
-            <h3 class="text-xl font-medium text-gray-900">Feature scales</h3>
-            <ul class="mt-4 space-y-3 text-gray-700">
-              <li><strong>Colour:</strong> <code>0.08</code></li>
-              <li><strong>Absolute magnitude:</strong> <code>0.12</code></li>
-              <li><strong>Metallicity:</strong> <code>0.4</code></li>
-              <li><strong>Surface gravity:</strong> <code>0.4</code></li>
-              <li><strong>log temperature:</strong> <code>0.2</code></li>
-            </ul>
-            <p class="mt-4 text-sm leading-7 text-gray-600">
-              These values are chosen so the matching is dominated by CMD location, with the extra parameters helping to break degeneracies.
-            </p>
           </aside>
         </section>
 
@@ -135,7 +123,7 @@ const pageDescription =
 <pre><code><span class="tok-keyword">from</span> <span class="tok-module">sklearn.neighbors</span> <span class="tok-keyword">import</span> <span class="tok-class">KDTree</span>
 <span class="tok-keyword">import</span> <span class="tok-module">numpy</span> <span class="tok-keyword">as</span> np
 
-X_model <span class="tok-operator">=</span> np.vstack([
+X_model <span class="tok-operator">=</span> <span class="tok-np">np</span>.vstack([
     color,
     MG,
     mh,
@@ -146,15 +134,15 @@ y_model <span class="tok-operator">=</span> logAge
 
 <span class="tok-comment"># y_model is logAge for each model point</span>
 <span class="tok-comment"># X_model[:,2] is MH for each model point (stacked as [color, MG, MH, logg, Teff])</span>
-logA_key <span class="tok-operator">=</span> np.round(y_model, <span class="tok-number">3</span>) <span class="tok-comment"># logAge grid rounding</span>
-mh_key <span class="tok-operator">=</span> np.round(X_model[:, <span class="tok-number">2</span>], <span class="tok-number">3</span>) <span class="tok-comment"># MH grid rounding</span>
+logA_key <span class="tok-operator">=</span> <span class="tok-np">np</span>.round(y_model, <span class="tok-number">3</span>) <span class="tok-comment"># logAge grid rounding</span>
+mh_key <span class="tok-operator">=</span> <span class="tok-np">np</span>.round(X_model[:, <span class="tok-number">2</span>], <span class="tok-number">3</span>) <span class="tok-comment"># MH grid rounding</span>
 
 keys <span class="tok-operator">=</span> logA_key.astype(str) <span class="tok-operator">+</span> <span class="tok-string">"_"</span> <span class="tok-operator">+</span> mh_key.astype(str)
-uniq, counts <span class="tok-operator">=</span> np.unique(keys, return_counts<span class="tok-operator">=</span><span class="tok-constant">True</span>)
+uniq, counts <span class="tok-operator">=</span> <span class="tok-np">np</span>.unique(keys, return_counts<span class="tok-operator">=</span><span class="tok-constant">True</span>)
 count_map <span class="tok-operator">=</span> dict(zip(uniq, counts))
 
 <span class="tok-comment"># feature scales - normalise each feature by its typical scale</span>
-sig <span class="tok-operator">=</span> np.array([<span class="tok-number">0.08</span>, <span class="tok-number">0.12</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.2</span>]) <span class="tok-comment"># color, MG, [M/H], logg, logTeff</span>
+sig <span class="tok-operator">=</span> <span class="tok-np">np</span>.array([<span class="tok-number">0.08</span>, <span class="tok-number">0.12</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.4</span>, <span class="tok-number">0.2</span>]) <span class="tok-comment"># color, MG, [M/H], logg, logTeff</span>
 
 tree <span class="tok-operator">=</span> <span class="tok-class">KDTree</span>(X_model <span class="tok-operator">/</span> sig, leaf_size<span class="tok-operator">=</span><span class="tok-number">200</span>)</code></pre>
             </div>
@@ -167,12 +155,12 @@ tree <span class="tok-operator">=</span> <span class="tok-class">KDTree</span>(X
           <div class="demo-code-card mt-8">
             <div class="demo-code-body overflow-x-auto">
 <pre><code><span class="tok-comment"># Observed values</span>
-X_star <span class="tok-operator">=</span> np.vstack([C0, MG0, mh_u, lg0, Tf0]).T
-X_star[good, <span class="tok-number">2</span>] <span class="tok-operator">=</span> np.clip(X_star[good, <span class="tok-number">2</span>], mh_min, mh_max)
+X_star <span class="tok-operator">=</span> <span class="tok-np">np</span>.vstack([C0, MG0, mh_u, lg0, Tf0]).T
+X_star[good, <span class="tok-number">2</span>] <span class="tok-operator">=</span> <span class="tok-np">np</span>.clip(X_star[good, <span class="tok-number">2</span>], mh_min, mh_max)
 
 dist, ind <span class="tok-operator">=</span> tree.query(X_star[good] <span class="tok-operator">/</span> sig, k<span class="tok-operator">=</span><span class="tok-number">128</span>)
 mask <span class="tok-operator">=</span> dist <span class="tok-operator">&lt;</span> <span class="tok-number">2.0</span>
-w <span class="tok-operator">=</span> np.exp(<span class="tok-operator">-</span><span class="tok-number">0.5</span> <span class="tok-operator">*</span> dist<span class="tok-operator">**</span><span class="tok-number">2</span>) <span class="tok-operator">*</span> mask</code></pre>
+w <span class="tok-operator">=</span> <span class="tok-np">np</span>.exp(<span class="tok-operator">-</span><span class="tok-number">0.5</span> <span class="tok-operator">*</span> dist<span class="tok-operator">**</span><span class="tok-number">2</span>) <span class="tok-operator">*</span> mask</code></pre>
             </div>
           </div>
 
@@ -183,7 +171,7 @@ w <span class="tok-operator">=</span> np.exp(<span class="tok-operator">-</span>
           <div class="demo-code-card mt-8">
             <div class="demo-code-body overflow-x-auto">
 <pre><code><span class="tok-comment"># Inverse-count weights =&gt; each (logAge, MH) isochrone has equal total weight</span>
-w_model <span class="tok-operator">=</span> np.array([<span class="tok-number">1.0</span> <span class="tok-operator">/</span> count_map[k] <span class="tok-keyword">for</span> k <span class="tok-keyword">in</span> keys], dtype<span class="tok-operator">=</span><span class="tok-class">float</span>)
+w_model <span class="tok-operator">=</span> <span class="tok-np">np</span>.array([<span class="tok-number">1.0</span> <span class="tok-operator">/</span> count_map[k] <span class="tok-keyword">for</span> k <span class="tok-keyword">in</span> keys], dtype<span class="tok-operator">=</span><span class="tok-class">float</span>)
 
 alpha <span class="tok-operator">=</span> <span class="tok-number">0.5</span>
 w <span class="tok-operator">*=</span> (w_model[ind] <span class="tok-operator">**</span> alpha)
