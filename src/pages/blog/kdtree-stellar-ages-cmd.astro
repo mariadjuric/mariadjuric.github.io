@@ -101,7 +101,7 @@ const pageDescription =
           </div>
           <div class="mt-8 grid gap-10 lg:grid-cols-1">
             <figure class="overflow-visible bg-transparent">
-              <img src="/images/blog/kdtree-stars/sgb_cmd_with_isochrones.png" alt="Subgiant-branch colour-magnitude diagram with PARSEC isochrones overlaid at different metallicities and ages" class="w-full" />
+              <img src="/images/blog/kdtree-stars/sgb_cmd_with_isochrones.png" alt="Subgiant-branch colour-magnitude diagram with PARSEC isochrones overlaid at different metallicities and ages" class="w-[85%] mx-auto" />
               <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
                 <strong>CMD structure in the subgiant branch.</strong> The subgiant branch is relatively age-sensitive, but metallicity still shifts the isochrone family enough that it should not be ignored.
               </figcaption>
@@ -133,6 +133,7 @@ const pageDescription =
           <div class="demo-code-card mt-8">
             <div class="demo-code-body overflow-x-auto">
 <pre><code><span class="tok-keyword">from</span> <span class="tok-module">sklearn.neighbors</span> <span class="tok-keyword">import</span> <span class="tok-class">KDTree</span>
+<span class="tok-keyword">import</span> <span class="tok-module">numpy</span> <span class="tok-keyword">as</span> np
 
 X_model <span class="tok-operator">=</span> np.vstack([
     color,
@@ -181,13 +182,14 @@ w <span class="tok-operator">=</span> np.exp(<span class="tok-operator">-</span>
 
           <div class="demo-code-card mt-8">
             <div class="demo-code-body overflow-x-auto">
-<pre><code><span class="tok-comment"># inverse-count weights =&gt; each (logAge, MH) isochrone has equal total weight</span>
+<pre><code><span class="tok-comment"># Inverse-count weights =&gt; each (logAge, MH) isochrone has equal total weight</span>
 w_model <span class="tok-operator">=</span> np.array([<span class="tok-number">1.0</span> <span class="tok-operator">/</span> count_map[k] <span class="tok-keyword">for</span> k <span class="tok-keyword">in</span> keys], dtype<span class="tok-operator">=</span><span class="tok-class">float</span>)
 
 alpha <span class="tok-operator">=</span> <span class="tok-number">0.5</span>
 w <span class="tok-operator">*=</span> (w_model[ind] <span class="tok-operator">**</span> alpha)
 w <span class="tok-operator">/=</span> w.sum(axis<span class="tok-operator">=</span><span class="tok-number">1</span>)[:, <span class="tok-constant">None</span>]
 
+<span class="tok-comment"># Loop over age bins and sum the neighbour weights falling into each one</span>
 <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> range(len(bins) <span class="tok-operator">-</span> <span class="tok-number">1</span>):
     sel <span class="tok-operator">=</span> (logAge_nn <span class="tok-operator">&gt;=</span> bins[i]) <span class="tok-operator">&amp;</span> (logAge_nn <span class="tok-operator">&lt;</span> bins[i<span class="tok-operator">+</span><span class="tok-number">1</span>])
     P[:, i] <span class="tok-operator">=</span> (w <span class="tok-operator">*</span> sel).sum(axis<span class="tok-operator">=</span><span class="tok-number">1</span>) <span class="tok-operator">/</span> w.sum(axis<span class="tok-operator">=</span><span class="tok-number">1</span>)</code></pre>
@@ -199,10 +201,10 @@ w <span class="tok-operator">/=</span> w.sum(axis<span class="tok-operator">=</s
           <h2 class="text-3xl font-bold text-gray-900">Results</h2>
           <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
             <p>
-              The end result is not a catalogue of precision stellar ages. It is a statistically useful age-labelled subgiant sample with broad but cleanly separated populations.
+              This figure shows the same subgiant selection box in CMD space, but now each star is coloured by the expected age returned by the KD-tree interpolation. The smooth colour gradient is the main sanity check: younger stars lie systematically toward one part of the subgiant branch, while older stars occupy another, with the isochrone sequence running through the sample in the expected direction. In other words, the method is recovering a coherent age ordering rather than assigning ages in a noisy or patchy way.
             </p>
             <figure class="overflow-visible bg-transparent">
-              <img src="/images/blog/kdtree-stars/sgb_age_map_expected_age.png" alt="Subgiant-branch stars in the CMD coloured by expected age from KD-tree isochrone matching" class="w-full" />
+              <img src="/images/blog/kdtree-stars/sgb_age_map_expected_age.png" alt="Subgiant-branch stars in the CMD coloured by expected age from KD-tree isochrone matching" class="w-[85%] mx-auto" />
               <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
                 <strong>Expected age map.</strong> After local interpolation in the scaled feature space, the CMD shows a smooth age ordering across the subgiant selection region.
               </figcaption>
