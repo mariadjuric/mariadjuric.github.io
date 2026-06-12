@@ -133,9 +133,15 @@ const pageDescription =
         <section class="mt-16">
           <h2 class="text-3xl font-bold text-gray-900">A compact implementation sketch</h2>
           <p class="mt-4 text-lg leading-8 text-gray-700">
-            The full pipeline has a fair amount of catalogue plumbing, but the core of the method is compact. This is the part that builds the scaled model grid and the KD-tree:
+            The full pipeline has a fair amount of catalogue plumbing, but the core of the method is compact. I’ve kept the code blocks here in a more demo-like style, focusing on the three ideas that matter most: building the model grid, querying neighbours, and turning neighbours into age probabilities.
           </p>
-          <div class="mt-8 overflow-x-auto p-6 text-sm leading-7 text-gray-800">
+
+          <div class="demo-code-card mt-8">
+            <div class="demo-code-header">
+              <span class="demo-code-pill">Step 1</span>
+              <span class="demo-code-title">Build the scaled isochrone grid</span>
+            </div>
+            <div class="demo-code-body overflow-x-auto">
 <pre><code>from sklearn.neighbors import KDTree
 
 sig = np.array([0.08, 0.12, 0.4, 0.4, 0.2])
@@ -149,22 +155,38 @@ X_model = np.vstack([
 ]).T
 
 tree = KDTree(X_model / sig, leaf_size=200)</code></pre>
+            </div>
           </div>
+
           <p class="mt-8 text-lg leading-8 text-gray-700">
-            Then the observed stars are queried in the same scaled space and converted into weights:
+            Then the observed stars are queried in the same scaled space and converted into local Gaussian weights.
           </p>
-          <div class="mt-8 overflow-x-auto p-6 text-sm leading-7 text-gray-800">
+
+          <div class="demo-code-card mt-8">
+            <div class="demo-code-header">
+              <span class="demo-code-pill">Step 2</span>
+              <span class="demo-code-title">Query local neighbours in the same feature space</span>
+            </div>
+            <div class="demo-code-body overflow-x-auto">
 <pre><code>X_star = np.vstack([C0, MG0, mh_u, lg0, Tf0]).T
 X_star[good, 2] = np.clip(X_star[good, 2], mh_min, mh_max)
 
 dist, ind = tree.query(X_star[good] / sig, k=128)
 mask = dist &lt; 2.0
 w = np.exp(-0.5 * dist**2) * mask</code></pre>
+            </div>
           </div>
+
           <p class="mt-8 text-lg leading-8 text-gray-700">
-            Finally, the local weights are corrected for non-uniform model density and summed into age bins:
+            Finally, the weights are corrected for non-uniform model density and accumulated into age bins.
           </p>
-          <div class="mt-8 overflow-x-auto p-6 text-sm leading-7 text-gray-800">
+
+          <div class="demo-code-card mt-8">
+            <div class="demo-code-header">
+              <span class="demo-code-pill">Step 3</span>
+              <span class="demo-code-title">Correct density bias and accumulate age-bin probabilities</span>
+            </div>
+            <div class="demo-code-body overflow-x-auto">
 <pre><code>alpha = 0.5
 w *= (w_model[ind] ** alpha)
 w /= w.sum(axis=1)[:, None]
@@ -172,6 +194,7 @@ w /= w.sum(axis=1)[:, None]
 for i in range(len(bins) - 1):
     sel = (logAge_nn &gt;= bins[i]) &amp; (logAge_nn &lt; bins[i+1])
     P[:, i] = (w * sel).sum(axis=1) / w.sum(axis=1)</code></pre>
+            </div>
           </div>
         </section>
 
@@ -188,6 +211,18 @@ for i in range(len(bins) - 1):
               For comparing age-stratified observational structure to simulation snapshots, that is exactly the tradeoff I want.
             </p>
           </div>
+        </section>
+
+        <section class="mt-20 border-t border-gray-200 pt-10">
+          <h2 class="text-3xl font-bold text-gray-900">References</h2>
+          <ol class="mt-8 list-decimal space-y-4 pl-6 text-lg leading-8 text-gray-700">
+            <li>Bressan, A., Marigo, P., Girardi, L., et al. (2012), <em>PARSEC: stellar tracks and isochrones</em>.</li>
+            <li>Pont, F. &amp; Eyer, L. (2004), <em>Estimating stellar ages from evolutionary tracks and observational data</em>.</li>
+            <li>Jørgensen, B. R. &amp; Lindegren, L. (2005), <em>Astrophysical parameters from Bayesian estimation</em>.</li>
+            <li>Andrae, R., Fouesneau, M., Creevey, O., et al. (2023), <em>Gaia DR3 astrophysical parameters from GSP-Phot</em>.</li>
+            <li>Friedman, J. H. (1991), <em>Multivariate adaptive regression splines</em>.</li>
+            <li>Pedregosa, F., Varoquaux, G., Gramfort, A., et al. (2011), <em>scikit-learn: Machine Learning in Python</em>.</li>
+          </ol>
         </section>
       </article>
     </main>
