@@ -174,7 +174,7 @@ export const siteConfig = {
       title: "Learning action-angle coordinates with a Koopman symplectic autoencoder",
       status: "New",
       description:
-        "A short research note on learning action-angle coordinates and orbital frequencies from trajectories with a symplectic Koopman autoencoder, showing only the 1D harmonic oscillator and isothermal slab tests for now.",
+        "On learning action-angle coordinates and orbital frequencies from trajectories with a symplectic Koopman autoencoder, showing only the 1D harmonic oscillator and isothermal slab tests for now.",
       url: "/blog/aakoopman-action-angle-kooopman",
       previewImage: "/images/blog/aakoopman/latent_preview_sharp.png",
       previewAlt: "Sharp latent-space preview for the Koopman-inspired symplectic autoencoder", 
@@ -184,11 +184,11 @@ export const siteConfig = {
       title: "Estimating stellar ages from the CMD with KD-trees",
       status: "New",
       description:
-        "A short research note on assigning approximate ages to Gaia subgiant stars by matching them to PARSEC isochrones in a scaled five-dimensional space using a KDTree.",
+        "On assigning approximate ages to Gaia subgiant stars by matching them to PARSEC isochrones in a scaled five-dimensional space using a KDTree.",
       url: "/blog/kdtree-stellar-ages-cmd",
       previewImage: "/images/blog/kdtree-stars/sgb_age_map_expected_age.png",
       previewAlt: "Subgiant-branch stars in the CMD coloured by expected age from KD-tree isochrone matching",
-      previewEyebrow: "Gaia DR3 · Isochrones · KDTree"
+      previewEyebrow: "Gaia DR3 Ages · Isochrones · KDTree"
     },
     {
       title: "FMAP v2: comparing a SciBERT classifier against the v1 TF-IDF baseline on astro-ph arXiv data",

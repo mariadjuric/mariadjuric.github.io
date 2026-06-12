@@ -4,7 +4,7 @@ import { siteConfig } from "../../config";
 
 const pageTitle = "Estimating stellar ages from the CMD with KD trees";
 const pageDescription =
-  "A short research note on assigning approximate ages to Gaia subgiant stars by matching them to PARSEC isochrones in a scaled five-dimensional space using a KDTree.";
+  "On assigning approximate ages to Gaia subgiant stars by matching them to PARSEC isochrones in a scaled five-dimensional space using a KDTree.";
 ---
 
 <html lang="en">
@@ -29,7 +29,7 @@ const pageDescription =
             Estimating stellar ages from the CMD with KD trees
           </h1>
           <p class="mt-6 max-w-4xl text-lg leading-8 text-gray-700">
-            This is a practical write-up of how I assign approximate ages to <em>Gaia</em> subgiant stars by matching them to PARSEC isochrones in a colour-magnitude diagram, while also using metallicity and atmospheric parameters as secondary constraints. The goal is not precision age dating for individual stars, but a robust way to carve out clean, disjoint age populations that can be compared against simulations.
+            Thisblog post is about how I assign approximate ages to <em>Gaia</em> subgiant stars by matching them to PARSEC isochrones in a colour-magnitude diagram, while also using metallicity and atmospheric parameters as secondary constraints. The goal is not precision age dating for individual stars, but a robust way to carve out clean, disjoint age populations that can be compared against simulations.
           </p>
           <div class="mt-6 flex flex-wrap gap-3 text-sm text-gray-600">
             <span class="px-3 py-1.5">Gaia DR3</span>
@@ -44,7 +44,7 @@ const pageDescription =
           <h2 class="text-3xl font-bold text-gray-900">Why use the subgiant branch?</h2>
           <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
             <p>
-              Isochrone fitting can be a fairly blunt instrument if you try to age-date stars across the whole Hertzsprung-Russell diagram. On the main sequence and giant branch, different combinations of age, mass, and metallicity can sit frustratingly close together. The subgiant branch is kinder: in that region the isochrones are more strongly ordered by age, so approximate age assignment becomes much more defensible.
+              Isochrone fitting can be a fairly blunt instrument if you try to age-date stars across the whole Hertzsprung-Russell diagram. On the main sequence and giant branch, different combinations of age, mass, and metallicity can sit frustratingly close together. The subgiant branch is better in the sense that the isochrones are more strongly ordered by age, so approximate age assignment becomes much more defensible.
             </p>
             <p>
               That still does not make the ages exact. A full Bayesian treatment would be more principled if the aim were to infer precise stellar ages star by star. But for my use case, I only need age bins that are narrow enough to compare against simulation snapshots and broad enough to remain statistically useful. In that regime, a fast nearest-neighbour interpolation scheme works surprisingly well.
@@ -56,7 +56,7 @@ const pageDescription =
           <h2 class="text-3xl font-bold text-gray-900">The basic idea</h2>
           <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
             <p>
-              Each observed star is represented by a five-dimensional feature vector built from extinction-corrected CMD coordinates and three extra physical quantities: colour, absolute magnitude, metallicity, surface gravity, and effective temperature.
+            Classical isochrone fitting usually means matching each star to the single evolutionary track or isochrone that fits best in a colour-magnitude diagram. That can work reasonably well, but it can also become brittle when different combinations of age and metallicity land in similar parts of the diagram. In my approach, I compare each star to a local cloud of nearby PARSEC model points and take a weighted average over those neighbours. That makes the age assignment smoother, more robust to noise, and less sensitive to the exact sampling of the model grid. I also add a few extra observables beyond CMD position — metallicity, surface gravity, and effective temperature — to help reduce degeneracy between otherwise similar-looking stars. These do not replace the CMD as the main anchor of the fit, but they provide useful secondary constraints when different isochrones overlap. So the method is still simple and fast, but a little more physically informed than plain CMD-only matching.
             </p>
             <p>
               The model grid is made from PARSEC isochrone points restricted to the same subgiant selection box. I compare each observed star to that grid in a scaled metric so that position in the CMD drives the match, while metallicity and atmospheric parameters act as secondary constraints.
@@ -99,17 +99,11 @@ const pageDescription =
               I therefore use calibrated <em>Gaia</em> DR3 GSP-Phot metallicities where available, with the remaining stars falling back to the raw catalogue values. Observed metallicities are clipped to the model-grid range so the method never extrapolates beyond the available isochrones.
             </p>
           </div>
-          <div class="mt-8 grid gap-10 lg:grid-cols-2">
+          <div class="mt-8 grid gap-10 lg:grid-cols-1">
             <figure class="overflow-visible bg-transparent">
               <img src="/images/blog/kdtree-stars/sgb_cmd_with_isochrones.png" alt="Subgiant-branch colour-magnitude diagram with PARSEC isochrones overlaid at different metallicities and ages" class="w-full" />
               <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
                 <strong>CMD structure in the subgiant branch.</strong> The subgiant branch is relatively age-sensitive, but metallicity still shifts the isochrone family enough that it should not be ignored.
-              </figcaption>
-            </figure>
-            <figure class="overflow-visible bg-transparent">
-              <img src="/images/blog/kdtree-stars/sgb_age_map_expected_age.png" alt="Subgiant-branch stars in the CMD coloured by expected age from KD-tree isochrone matching" class="w-full" />
-              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
-                <strong>Expected age map.</strong> After local interpolation in the scaled feature space, the CMD shows a smooth age ordering across the subgiant selection region.
               </figcaption>
             </figure>
           </div>
@@ -195,6 +189,12 @@ w <span class="tok-operator">/=</span> w.sum(axis<span class="tok-operator">=</s
             <p>
               I then assign stars to 4, 5, 6, 7, 8, and 9 Gyr selections using a plus-or-minus 300 Myr threshold around each target age. That leaves 372,398 stars between 4 and 9 Gyr in the sample version described here, with an approximately uniform distribution in age.
             </p>
+            <figure class="overflow-visible bg-transparent">
+              <img src="/images/blog/kdtree-stars/sgb_age_map_expected_age.png" alt="Subgiant-branch stars in the CMD coloured by expected age from KD-tree isochrone matching" class="w-full" />
+              <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+                <strong>Expected age map.</strong> After local interpolation in the scaled feature space, the CMD shows a smooth age ordering across the subgiant selection region.
+              </figcaption>
+            </figure>
             <p>
               For comparing age-stratified observational structure to simulation snapshots, that is exactly the tradeoff I want.
             </p>
