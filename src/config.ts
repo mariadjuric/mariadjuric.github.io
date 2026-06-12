@@ -6,7 +6,7 @@ export const siteConfig = {
   accentColor: "#627f2f",
   heroGreeting: "Hi, I'm",
   heroSubtitle:
-    "Physics PhD at UCL specialising in deep learning, dynamical systems, stochastic modelling, and scientific computing.",
+    "Physics PhD at UCL focusing on deep learning, dynamical systems, stochastic modelling, and scientific computing.",
   location: "London, UK / EU",
   social: {
     email: "maria.djuric99@gmail.com",
@@ -16,8 +16,8 @@ export const siteConfig = {
   profileImage: "/profile.png",
   profileImageAlt: "Portrait of Maria Djuric",
   aboutMe: [
-    "I'm a Physics PhD researcher at University College London with a background in mathematics, physics, and scientific computing. My work sits between theory and computation: I like building models from abstract mathematical principles, that are numerically reliable, and actually useful in practice.",
-    "Recently I've been focusing on deep learning for Hamiltonian dynamics and action-angle coordinates, alongside broader quantitative modelling in nonlinear diffusion, stochastic calculus, and dynamical systems. I'm especially interested in interpretable machine learning for physical systems, efficient simulation pipelines, and research tools that make complicated models easier to test and trust.",
+    "I'm a Physics PhD researcher at University College London with a background in mathematics, physics, and scientific computing. My work sits between theory and computation. I like building models from abstract mathematical principles, that are numerically reliable, and actually useful in practice.",
+    "Recently I've been focusing on deep learning for Hamiltonian dynamics and action-angle coordinates, as well as quantitative modelling in nonlinear diffusion with stochastic calculus, and simulation of dynamical systems.",
   ],
   skills: [
     "Python",
@@ -171,14 +171,14 @@ export const siteConfig = {
   ],
   blog: [
     {
-      title: "Learning action-angle coordinates with a Koopman-inspired symplectic autoencoder",
+      title: "Learning action-angle coordinates with a Koopman symplectic autoencoder",
       status: "New",
       description:
         "A short research note on learning action-angle coordinates and orbital frequencies from trajectories with a symplectic Koopman autoencoder, showing only the 1D harmonic oscillator and isothermal slab tests for now.",
       url: "/blog/aakoopman-action-angle-kooopman",
       previewImage: "/images/blog/aakoopman/latent_preview_sharp.png",
       previewAlt: "Sharp latent-space preview for the Koopman-inspired symplectic autoencoder", 
-      previewEyebrow: "Koopman-inspired symplectic learning"
+      previewEyebrow: "Deep learning in dynamical systems · Hamiltonian dynamics"
     },
     {
       title: "FMAP v2: comparing a SciBERT classifier against the v1 TF-IDF baseline on astro-ph arXiv data",
@@ -198,7 +198,7 @@ export const siteConfig = {
       url: "/blog/fmap-paper-atlas",
       previewImage: "/images/blog/fmap-embedding-projection.png",
       previewAlt: "FMAP embedding projection map",
-      previewEyebrow: "Paper atlas · embeddings · UMAP"
+      previewEyebrow: " Embeddings · UMAP"
     },
   ],
   footerNote:
