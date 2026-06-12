@@ -89,54 +89,25 @@ const pageDescription =
           </div>
         </section>
 
-        <section class="mt-16 grid gap-8 lg:grid-cols-[1.05fr,0.95fr]">
-          <div>
-            <h2 class="text-3xl font-bold text-gray-900">Building a neural network</h2>
-            <p class="mt-4 text-lg leading-8 text-gray-700">
-              The model is a symplectic autoencoder. It learns an invertible map from phase-space coordinates into a latent space where each degree of freedom is represented by a two-dimensional plane. In that latent space, the dynamics are constrained to look like simple rotations, so the radius of each latent pair behaves like an action and the phase behaves like an angle.
-            </p>
-            <p class="mt-4 text-lg leading-8 text-gray-700">
-              A separate small neural network then learns the frequency map and another learns a scalar energy-like function, with the model encouraged to satisfy the Hamiltonian relation <code> dH/dJ = &Omega;(J)</code>. The point is not just to reconstruct trajectories, but to make the latent variables physically interpretable.
-            </p>
-          </div>
-          <aside class="p-6">
-            <h3 class="text-xl font-medium text-gray-900">Core ingredients</h3>
-            <ul class="mt-4 space-y-3 text-gray-700">
-              <li><strong>Encoder/decoder:</strong> symplectic normalising-flow style network</li>
-              <li><strong>Latent dynamics:</strong> planar rotations</li>
-              <li><strong>Actions:</strong> latent radii, with <code>J<sub>j</sub> = r<sub>j</sub><sup>2</sup> / 2</code></li>
-              <li><strong>Angles:</strong> latent phases</li>
-              <li><strong>Frequencies:</strong> learned frequency map <code>&Omega;(J)</code></li>
-              <li><strong>Energy map:</strong> learned scalar Hamiltonian <code>H(J)</code></li>
-            </ul>
-          </aside>
-        </section>
-
         <section class="mt-16">
-          <h2 class="text-3xl font-bold text-gray-900">A short mathematical sketch</h2>
+          <h2 class="text-3xl font-bold text-gray-900">Building a neural network</h2>
           <div class="mt-6 space-y-5 text-lg leading-8 text-gray-700">
             <p>
-              The autoencoder learns an encoder <code>&Psi;</code> and decoder <code>&Phi;</code> so that phase-space evolution is approximately conjugate to a simpler latent evolution,
+              The model is a symplectic autoencoder. It learns an invertible map from phase-space coordinates into a latent space where each degree of freedom is represented by a two-dimensional plane. In that latent space, the dynamics are constrained to look like simple rotations, so the radius of each latent pair behaves like an action and the phase behaves like an angle.
             </p>
-            <div class="overflow-x-auto px-6 py-6 text-center text-gray-900">
-              <span class="font-serif text-lg">x<sub>k+1</sub> &asymp; &Phi;(K(&Psi;(x<sub>k</sub>)))</span>
-            </div>
             <p>
-              Each latent pair is interpreted as a complex coordinate whose radius encodes an action and whose phase encodes an angle,
+              The basic time-evolution picture is summarised in the schematic below. Given predicted actions <code>J_k</code> from the latent radii, the learned frequency map is evaluated as <code>&omega;_k = &Omega;(J_k)</code>. A latent evolution map <code>K<sub>&Omega;</sub></code> then applies the corresponding block rotation, producing <code>&#x1E8F;<sub>k+1</sub> = K<sub>&Omega;</sub>(y_k)</code>. Finally, the decoder maps that latent state back into ordinary phase space, so that the one-step prediction is <code>&#x1E8B;<sub>k+1</sub> = &#x1D4AF;<sup>-1</sup>(&#x1E8F;<sub>k+1</sub>)</code>.
             </p>
-            <div class="overflow-x-auto px-6 py-6 text-center text-gray-900">
-              <span class="font-serif text-lg">&psi;<sub>j</sub> = u<sub>j</sub> + i v<sub>j</sub> = &radic;(2J<sub>j</sub>) exp(i&theta;<sub>j</sub>)</span>
-            </div>
             <p>
-              The latent step is then just a rotation,
-            </p>
-            <div class="overflow-x-auto px-6 py-6 text-center text-gray-900">
-              <span class="font-serif text-lg">[u<sub>j</sub>, v<sub>j</sub>]<sub>k+1</sub><sup>pred</sup> = R(&phi;<sub>j</sub>) [u<sub>j</sub>, v<sub>j</sub>]<sub>k</sub>, with &phi;<sub>j</sub> = &omega;<sub>j</sub>&Delta;t</span>
-            </div>
-            <p>
-              That rotation preserves radius exactly. So the latent action is conserved by construction, while the frequency map is learned from data.
+              The point is not just to reconstruct trajectories, but to organise the dynamics in a latent space where conserved actions and angle-like evolution emerge naturally.
             </p>
           </div>
+          <figure class="mt-10 overflow-visible bg-transparent">
+            <img src="/images/blog/aakoopman/koopman_eigenfunction_schematic.png" alt="Schematic diagram of the Koopman symplectic autoencoder latent evolution pipeline" class="w-[88%] mx-auto" />
+            <figcaption class="px-6 py-5 text-sm leading-7 text-gray-600">
+              <strong>Latent-space evolution schematic.</strong> Phase-space coordinates are encoded into a latent representation, advanced by a learned block rotation determined by the frequency map <code>&Omega;(J)</code>, and then decoded back into ordinary coordinates after one timestep.
+            </figcaption>
+          </figure>
         </section>
 
         <section class="mt-16">
